@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: bitnami/postgresql
+    container_name: "${APP_NAME}-postgres"
+    environment:
+      - POSTGRESQL_USERNAME=${POSTGRES_USER}
+      - POSTGRESQL_PASSWORD=${POSTGRES_PASS}
+      - POSTGRESQL_DATABASE=${POSTGRES_NAME}
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    networks:
+      - app-network
+
+networks:
+  app-network:
