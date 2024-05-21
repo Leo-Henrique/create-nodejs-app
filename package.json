@@ -4,7 +4,7 @@
   "author": "Leonardo Henrique <leonardo0507.business@gmail.com>",
   "scripts": {
     "prepare": "husky",
-    "start:dev": "tsx watch ./src/server.ts",
+    "start:dev": "tsx watch ./src/index.ts",
     "typecheck": "tsc --noEmit",
     "lint": "eslint . --ext .ts --max-warnings 0 --fix --cache",
     "format": "prettier . --write --cache",
@@ -13,9 +13,7 @@
     "test:coverage": "vitest run --coverage.enabled=true --coverage.all=false"
   },
   "dependencies": {
-    "@fastify/cors": "9.0.1",
     "dotenv": "16.4.5",
-    "fastify": "4.27.0",
     "zod": "3.23.8"
   },
   "devDependencies": {
