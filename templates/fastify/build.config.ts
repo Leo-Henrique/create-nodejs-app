@@ -45,6 +45,7 @@ export default defineBuildConfig({
       format: "cjs",
       entryFileNames: "[name].js",
       preserveModules: true,
+      strict: false,
     },
     esbuild: {
       minifySyntax: true,
