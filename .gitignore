@@ -133,4 +133,4 @@ dist
 .DS_Store
 
 # Generated projects by script
-src/generated-apps
+generated-apps

@@ -12,8 +12,8 @@
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
     "test:coverage": "vitest run --coverage.enabled=true --coverage.all=false",
-    "template:create": "tsx ./src/scripts/create-template.script.ts",
-    "template:open": "tsx ./src/scripts/open-template.script.ts"
+    "template:create": "tsx ./scripts/create-template.script.ts",
+    "template:open": "tsx ./scripts/open-template.script.ts",
   },
   "dependencies": {
     "commander": "12.1.0",
