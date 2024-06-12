@@ -4,21 +4,30 @@
   "author": "Leonardo Henrique <leonardo0507.business@gmail.com>",
   "scripts": {
     "prepare": "husky",
-    "start:dev": "tsx watch ./src/index.ts",
+    "start:dev": "tsx ./src/index.ts",
+    "start:dev:watch": "tsx watch ./src/index.ts",
     "typecheck": "tsc --noEmit",
     "lint": "eslint . --ext .ts --max-warnings 0 --fix --cache",
     "format": "prettier . --write --cache",
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
-    "test:coverage": "vitest run --coverage.enabled=true --coverage.all=false"
+    "test:coverage": "vitest run --coverage.enabled=true --coverage.all=false",
+    "template:create": "tsx ./src/scripts/create-template.script.ts",
+    "template:open": "tsx ./src/scripts/open-template.script.ts"
   },
   "dependencies": {
+    "commander": "12.1.0",
     "dotenv": "16.4.5",
+    "picocolors": "1.0.1",
+    "prompts": "2.4.2",
+    "validate-npm-package-name": "5.0.1",
     "zod": "3.23.8"
   },
   "devDependencies": {
     "@faker-js/faker": "8.4.1",
     "@types/node": "20.12.12",
+    "@types/prompts": "2.4.9",
+    "@types/validate-npm-package-name": "4.0.2",
     "@typescript-eslint/eslint-plugin": "7.10.0",
     "@typescript-eslint/parser": "7.10.0",
     "eslint": "8.57.0",
