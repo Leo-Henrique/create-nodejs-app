@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { successLog } from "@/utils/logs";
 import { onCancelPrompt } from "@/utils/on-cancel";
 import { existsSync } from "fs";
