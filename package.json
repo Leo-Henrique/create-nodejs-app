@@ -3,6 +3,7 @@
   "version": "0.0.6",
   "author": "Leonardo Henrique <leonardo0507.business@gmail.com>",
   "description": "Create a modern Node.js app with TypeScript using one command.",
+  "license": "MIT",
   "keywords": [
     "node",
     "node.js",
