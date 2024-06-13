@@ -43,7 +43,6 @@ export async function helloMultipartController(app: FastifyInstance) {
 
       res.status(200).send({
         message: "Hello world!",
-
         description,
         file: fileInfo,
       });

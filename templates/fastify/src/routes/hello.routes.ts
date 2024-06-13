@@ -1,6 +1,6 @@
-import { helloMultipartController } from "@/controllers/hello-multipart.controller";
+import { helloMultipartController } from "@/controllers/hello/hello-multipart.controller";
+import { helloController } from "@/controllers/hello/hello.controller";
 import { FastifyInstance } from "fastify";
-import { helloController } from "../controllers/hello.controller";
 
 export async function helloRoutes(app: FastifyInstance) {
   app.register(helloController);
