@@ -36,7 +36,8 @@
     "template:open": "tsx ./scripts/open-template.script.ts",
     "prebuild": "rimraf ./dist",
     "build": "unbuild",
-    "prepublishOnly": "pnpm build"
+    "prepublishOnly": "pnpm build",
+    "release": "bumpp --commit --push --tag"
   },
   "dependencies": {
     "commander": "12.1.0",
@@ -53,6 +54,7 @@
     "@types/validate-npm-package-name": "4.0.2",
     "@typescript-eslint/eslint-plugin": "7.10.0",
     "@typescript-eslint/parser": "7.10.0",
+    "bumpp": "9.4.1",
     "eslint": "8.57.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-vitest": "0.4.0",
