@@ -1,0 +1,38 @@
+name: Check templates
+
+on: [pull_request, merge_group]
+
+jobs:
+  check-templates:
+    name: Check templates
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.5.1
+          cache: "pnpm"
+
+      - name: Clean template
+        run: |
+          cd ./templates/clean
+          pnpm install
+          pnpm typecheck
+          pnpm lint
+          pnpm prettier --check .
+
+      - name: Fastify template
+        run: |
+          cd ./templates/fastify
+          pnpm install
+          pnpm typecheck
+          pnpm lint
+          pnpm prettier --check .
+          pnpm test:e2e
