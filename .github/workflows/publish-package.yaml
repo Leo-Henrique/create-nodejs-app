@@ -1,15 +1,23 @@
 name: Publish package
 
-on: [push]
+on:
+  push:
+    tags:
+      - "v*"
 
 jobs:
   publish-package:
     name: Publish package
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -21,13 +29,17 @@ jobs:
         with:
           node-version: 20.5.1
           cache: "pnpm"
+          registry-url: https://registry.npmjs.org/
 
       - name: Install dependencies
         run: pnpm install
 
       - name: Publish package
-        run: |
-          pnpm version patch
-          pnpm publish --access public
+        run: pnpm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Generate changelog
+        run: npx changelogithub
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
