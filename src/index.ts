@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+import "./config";
+
 import { successLog } from "@/utils/logs";
 import { onCancelPrompt } from "@/utils/on-cancel";
 import { existsSync } from "fs";
@@ -9,7 +11,6 @@ import prompts, { PromptType } from "prompts";
 import { copyTemplateCompose } from "./compose-app/copy-template.compose";
 import { replaceContentInFileCompose } from "./compose-app/replace-content-in-file.compose";
 import { GENERATED_APP_ROOT_PATH } from "./config";
-import { env } from "./env";
 import { packageNameValidation } from "./validations/package-name.validation";
 
 type Questions = "projectName" | "packageManager" | "template" | "framework";
@@ -69,7 +70,10 @@ const questions: Array<prompts.PromptObject<Questions>> = [
 ];
 
 (async () => {
-  if (env.NODE_ENV === "development" && !existsSync(GENERATED_APP_ROOT_PATH)) {
+  if (
+    process.env.NODE_ENV === "development" &&
+    !existsSync(GENERATED_APP_ROOT_PATH)
+  ) {
     await mkdir(GENERATED_APP_ROOT_PATH, { recursive: true });
   }
 
