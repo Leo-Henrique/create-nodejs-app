@@ -29,6 +29,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Code check
+        run: |
+          pnpm typecheck
+          pnpm lint
+          pnpm prettier . --check
+
       - name: Release
         run: pnpm dlx semantic-release
         env:
