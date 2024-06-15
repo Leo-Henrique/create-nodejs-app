@@ -1,4 +1,4 @@
-import { toPascalCase } from "@/utils/to-pascal-case";
+import { capitalizeWord } from "@/utils/capitalize-word";
 
 export abstract class BaseError extends Error {
   public abstract error: string;
@@ -55,7 +55,7 @@ export class ResourceAlreadyExistsError extends BaseError {
   public statusCode = 409;
 
   constructor(resource: string) {
-    super(`${toPascalCase(resource)} já existente.`);
+    super(`${capitalizeWord(resource)} já existente.`);
   }
 }
 
@@ -64,7 +64,7 @@ export class ResourceNotFoundError extends BaseError {
   public statusCode = 400;
 
   constructor(resource: string) {
-    super(`${toPascalCase(resource)} inexistente.`);
+    super(`${capitalizeWord(resource)} inexistente.`);
   }
 }
 

@@ -1,3 +1,3 @@
-export function toPascalCase(text: string) {
+export function capitalizeWord(text: string) {
   return text[0].toUpperCase() + text.slice(1);
 }
