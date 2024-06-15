@@ -1,6 +1,7 @@
 {
   "name": "@leo-h/create-nodejs-app",
   "version": "0.1.2",
+  "packageManager": "pnpm@9.1.1",
   "author": "Leonardo Henrique <leonardo0507.business@gmail.com>",
   "description": "Create a modern Node.js app with TypeScript using one command.",
   "license": "MIT",
@@ -35,8 +36,7 @@
     "template:open": "tsx ./scripts/open-template.script.ts",
     "prebuild": "rimraf ./dist",
     "build": "unbuild",
-    "prepublishOnly": "pnpm build",
-    "release": "bumpp --commit --push --tag"
+    "prepublishOnly": "pnpm build"
   },
   "dependencies": {
     "commander": "12.1.0",
@@ -52,7 +52,6 @@
     "@types/validate-npm-package-name": "4.0.2",
     "@typescript-eslint/eslint-plugin": "7.10.0",
     "@typescript-eslint/parser": "7.10.0",
-    "bumpp": "9.4.1",
     "eslint": "8.57.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-vitest": "0.4.0",

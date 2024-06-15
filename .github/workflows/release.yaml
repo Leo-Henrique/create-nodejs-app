@@ -1,13 +1,12 @@
-name: Publish package
+name: Release
 
 on:
   push:
-    tags:
-      - "v*"
+    branches: main
 
 jobs:
-  publish-package:
-    name: Publish package
+  release:
+    name: Release
     runs-on: ubuntu-latest
 
     permissions:
@@ -17,30 +16,21 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 9.3.0
 
       - name: Setup node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20.5.1
+          node-version: lts/*
           cache: "pnpm"
-          registry-url: https://registry.npmjs.org/
 
       - name: Install dependencies
         run: pnpm install
 
-      - name: Publish package
-        run: pnpm publish --access public --no-git-checks
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Generate changelog
-        run: npx changelogithub
+      - name: Release
+        run: pnpm dlx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
