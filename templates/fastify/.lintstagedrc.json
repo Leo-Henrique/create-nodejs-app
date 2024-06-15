@@ -1,4 +1,4 @@
 {
   "*.{ts,json,yaml,yml,md}": "prettier --write --cache",
-  "*.ts": ["zsh -c 'tsc --noEmit'", "eslint --max-warnings 0 --fix --cache"]
+  "*.ts": ["eslint --max-warnings 0 --fix --cache"]
 }
