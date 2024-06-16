@@ -1,6 +1,9 @@
 # @leo-h/create-nodejs-app
 
-![example](https://github.com/Leo-Henrique/create-nodejs-app/assets/72027449/2084fd9f-2e7a-4d2b-9111-8b8769825c7a)
+<div align="center">
+	<img src="https://github.com/Leo-Henrique/create-nodejs-app/assets/72027449/f62187c5-8667-4cf4-b121-0043aceb164e"
+	alt="Script usage example" />
+</div>
 
 Create a Node.js application with TypeScript with just one command and without worrying about environment or framework configurations. Dedicate your energy only to the business rules of your application.
 
