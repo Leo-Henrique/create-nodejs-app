@@ -15,11 +15,11 @@
           "types": [
             { "type": "feat", "section": "Features" },
             { "type": "fix", "section": "Bug fixes" },
-            { "type": "chore", "section": "Misc" },
-            { "type": "perf", "hidden": "Misc" },
-            { "type": "refactor", "hidden": "Misc" },
-            { "type": "test", "hidden": "Misc" },
-            { "type": "docs", "hidden": true },
+            { "type": "chore", "scope": "templates", "section": "Misc" },
+            { "type": "perf", "scope": "templates", "section": "Misc" },
+            { "type": "refactor", "scope": "templates", "section": "Misc" },
+            { "type": "test", "scope": "templates", "section": "Misc" },
+            { "type": "docs", "scope": "templates", "section": "Misc" },
             { "type": "style", "hidden": true }
           ]
         }
