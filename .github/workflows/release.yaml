@@ -1,8 +1,11 @@
 name: Release
 
 on:
-  push:
-    branches: main
+  workflow_run:
+    workflows: ["Code check", "E2E tests"]
+    types: [completed]
+    branches:
+      - "main"
 
 jobs:
   release:
@@ -28,12 +31,6 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install
-
-      - name: Code check
-        run: |
-          pnpm typecheck
-          pnpm lint
-          pnpm prettier . --check
 
       - name: Release
         run: pnpm dlx semantic-release
