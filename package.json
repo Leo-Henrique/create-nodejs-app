@@ -33,8 +33,7 @@
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
     "test:coverage": "vitest run --coverage.enabled=true --coverage.all=false",
-    "template:create": "tsx ./scripts/create-template.script.ts",
-    "template:open": "tsx ./scripts/open-template.script.ts",
+    "template": "tsx ./scripts/template-cli.ts",
     "prebuild": "rimraf ./dist",
     "build": "unbuild",
     "prepublishOnly": "pnpm build"

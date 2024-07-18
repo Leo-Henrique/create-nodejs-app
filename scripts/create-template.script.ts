@@ -3,54 +3,71 @@ import { replaceContentInFileCompose } from "@/compose-app/replace-content-in-fi
 import { TEMPLATES_PATH } from "@/config";
 import { successLog } from "@/utils/logs";
 import { onCancelPrompt } from "@/utils/on-cancel";
-import { filenameValidation } from "@/validations/filename.validation";
-import { packageNameValidation } from "@/validations/package-name.validation";
-import { readdir, rename } from "fs/promises";
+import { FileNameValidation } from "@/validations/file-name.validation";
+import { TemplateNameValidation } from "@/validations/template-name-validation";
+import { rename } from "fs/promises";
 import { extname, resolve } from "path";
 import { cyan } from "picocolors";
 import prompts from "prompts";
 
-type Questions = "templateName" | "mainFilename";
+interface CreateTemplateScriptOptions {
+  mainFile: string;
+}
 
-const questions: Array<prompts.PromptObject<Questions>> = [
-  {
-    type: "text",
-    name: "templateName",
-    message: "Template name:",
-    validate: async value => {
-      const templateNamesThatAlreadyExists = await readdir(TEMPLATES_PATH);
+export async function createTemplateScript(
+  templateName: string,
+  { mainFile }: CreateTemplateScriptOptions,
+) {
+  const templateNameValidation = new TemplateNameValidation();
+  const fileNameValidation = new FileNameValidation();
 
-      if (templateNamesThatAlreadyExists.includes(value)) {
-        return "Template already exists.";
-      }
+  if (templateName) {
+    await templateNameValidation.fromCli({ templateName });
+  } else {
+    const response = await prompts(
+      {
+        type: "text",
+        name: "templateName",
+        message: "Template name:",
+        validate: async val =>
+          await templateNameValidation.fromPrompt({ templateName: val }),
+      },
+      { onCancel: onCancelPrompt },
+    );
 
-      return packageNameValidation(value);
-    },
-  },
-  {
-    type: "text",
-    name: "mainFilename",
-    message: `Main filename (from "src" root folder):`,
-    initial: "index.ts",
-    format: value => value.replace(extname(value), ""),
-    validate: filenameValidation,
-  },
-];
+    templateName = response.templateName;
+  }
 
-(async () => {
-  const response = await prompts(questions, {
-    onCancel: onCancelPrompt,
-  });
-  const generatedAppPath = resolve(TEMPLATES_PATH, response.templateName);
+  if (mainFile) {
+    await fileNameValidation.fromCli({ fileName: mainFile });
+  } else {
+    const response = await prompts(
+      {
+        type: "text",
+        name: "mainFile",
+        message: `Main file name (program input file, example: "index")`,
+        initial: "index.ts",
+        validate: async val =>
+          await fileNameValidation.fromPrompt({ fileName: val }),
+      },
+      { onCancel: onCancelPrompt },
+    );
+
+    mainFile = response.mainFile;
+  }
+
+  mainFile = mainFile.replace(extname(mainFile), "");
+
+  const generatedAppPath = resolve(TEMPLATES_PATH, templateName);
 
   await copyTemplateCompose(generatedAppPath, "clean");
 
-  if (response.mainFilename !== "index") {
+  if (mainFile !== "index") {
     const defaultMainFilePath = resolve(generatedAppPath, "./src/index.ts");
     const newMainFilePath = resolve(
       generatedAppPath,
       "./src",
-      `${response.mainFilename}.ts`,
+      `${mainFile}.ts`,
     );
 
     const packageJsonPath = resolve(generatedAppPath, "package.json");
@@ -59,17 +76,17 @@ const questions: Array<prompts.PromptObject<Questions>> = [
     await Promise.all([
       rename(defaultMainFilePath, newMainFilePath),
       replaceContentInFileCompose(packageJsonPath, [
-        ["index.js", `${response.mainFilename}.js`],
-        ["index.ts", `${response.mainFilename}.ts`],
+        ["index.js", `${mainFile}.js`],
+        ["index.ts", `${mainFile}.ts`],
       ]),
       replaceContentInFileCompose(buildConfigPath, [
-        ["index.ts", `${response.mainFilename}.ts`],
+        ["index.ts", `${mainFile}.ts`],
       ]),
     ]);
   }
 
   successLog(
-    `Success in creating new template ${cyan(response.templateName)}!`,
+    `Success in creating new template ${cyan(templateName)}!`,
     `> ${generatedAppPath}`,
   );
-})();
+}

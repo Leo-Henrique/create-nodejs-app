@@ -1,43 +1,48 @@
 import { TEMPLATES_PATH } from "@/config";
-import { successLog, warnLog } from "@/utils/logs";
+import { left } from "@/utils/left";
+import { successLog } from "@/utils/logs";
 import { onCancelPrompt } from "@/utils/on-cancel";
 import { toPascalCase } from "@/utils/to-pascal-case";
 import { execSync } from "child_process";
 import { readdirSync } from "fs";
+import { readdir } from "fs/promises";
 import { resolve } from "path";
 import { cyan } from "picocolors";
 import prompts from "prompts";
 
-type Questions = "templateName";
+export async function openTemplateScript(templateName: string) {
+  if (templateName) {
+    const templateNames = await readdir(TEMPLATES_PATH);
 
-const questions: Array<prompts.PromptObject<Questions>> = [
-  {
-    type: "select",
-    name: "templateName",
-    message: "Template name:",
-    choices: () => {
-      const templateNames = readdirSync(TEMPLATES_PATH);
+    if (!templateNames.includes(templateName))
+      return left(`Template with name "${templateName}" not found.`);
+  } else {
+    const response = await prompts(
+      {
+        type: "select",
+        name: "templateName",
+        message: "Template name:",
+        choices: () => {
+          const templateNames = readdirSync(TEMPLATES_PATH);
 
-      return templateNames.map(name => ({
-        title: toPascalCase(name),
-        value: name,
-      }));
-    },
-  },
-];
+          return templateNames.map(name => ({
+            title: toPascalCase(name),
+            value: name,
+          }));
+        },
+      },
+      { onCancel: onCancelPrompt },
+    );
 
-(async () => {
-  warnLog(`Work only in Visual Studio Code with "code" CLI enabled. \n`);
+    templateName = response.templateName;
+  }
 
-  const response = await prompts(questions, {
-    onCancel: onCancelPrompt,
-  });
-  const templatePath = resolve(TEMPLATES_PATH, response.templateName);
+  const templatePath = resolve(TEMPLATES_PATH, templateName);
 
   execSync(`code ${templatePath}`);
 
   successLog(
-    `Success in open template ${cyan(response.templateName)}!`,
+    `Success in open template ${cyan(templateName)}!`,
     `> ${templatePath}`,
   );
-})();
+}

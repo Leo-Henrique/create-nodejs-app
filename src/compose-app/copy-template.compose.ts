@@ -1,4 +1,4 @@
-import { Templates } from "@/@types/templates";
+import { Templates } from "@/core/templates";
 import { TEMPLATES_PATH } from "@/config";
 import { cp } from "fs/promises";
 import { basename, resolve } from "path";
