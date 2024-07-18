@@ -1,11 +1,16 @@
-name: Run tests
+name: E2E tests
 
 on: [push, pull_request]
 
 jobs:
-  code-check:
-    name: Code check
+  e2e-tests:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        project: [./templates/fastify]
+
+    name: E2E tests (${{ matrix.project }})
 
     steps:
       - name: Checkout repository
@@ -21,13 +26,11 @@ jobs:
           cache: "pnpm"
 
       - name: Install dependencies
-        run: pnpm install
+        run: |
+          cd ${{ matrix.project }}
+          pnpm install
 
-      - name: Run type check
-        run: pnpm typecheck
-
-      - name: Run lint
-        run: pnpm lint
-
-      - name: Run formatting code check
-        run: pnpm prettier . --check
+      - name: Run e2e test
+        run: |
+          cd ${{ matrix.project }}
+          pnpm test:e2e
