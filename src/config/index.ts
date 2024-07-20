@@ -1,20 +1,17 @@
-import { basename, resolve } from "path";
+import appRootPath from "app-root-path";
+import { resolve } from "path";
 
-const parentFolder = basename(resolve(__dirname, ".."));
-
-if (parentFolder === "dist") {
+if (!process.env.NODE_ENV && process.argv[1].endsWith(".js")) {
   process.env.NODE_ENV = "production";
 } else {
   process.env.NODE_ENV = "development";
 }
 
-const rootPath = resolve(__dirname, "../..");
-
-export const GENERATED_APP_ROOT_PATH =
+export const GENERATED_APP_TARGET_ROOT_PATH =
   process.env.NODE_ENV === "production"
     ? process.cwd()
-    : resolve(rootPath, "generated-apps");
+    : resolve(appRootPath.path, "generated-apps");
 
-export const TEMPLATES_PATH = resolve(rootPath, "templates");
+export const TEMPLATES_PATH = resolve(appRootPath.path, "templates");
 
 export const CLEAN_TEMPLATE_PATH = resolve(TEMPLATES_PATH, "clean");

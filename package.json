@@ -39,6 +39,7 @@
     "prepublishOnly": "pnpm build"
   },
   "dependencies": {
+    "app-root-path": "3.1.0",
     "commander": "12.1.0",
     "picocolors": "1.0.1",
     "prompts": "2.4.2",
