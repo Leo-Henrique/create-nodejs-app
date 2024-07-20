@@ -9,23 +9,22 @@ interface TemplateNameValidationParams {
 }
 
 export class TemplateNameValidation extends Validation<TemplateNameValidationParams> {
-  public params!: TemplateNameValidationParams;
-  public constructor() {
-    super();
+  public static create(params: TemplateNameValidationParams) {
+    return new this().createValidation(params);
   }
 
   async validate(): Promise<ValidationResult> {
+    const { templateName } = this.params;
+
     const alreadyExistingTemplates = await readdir(TEMPLATES_PATH);
 
-    if (alreadyExistingTemplates.includes(this.params.templateName))
+    if (alreadyExistingTemplates.includes(templateName))
       return {
         isValid: false,
-        issue: `Template with name "${this.params.templateName}" already exists.`,
+        issue: `Template with name "${templateName}" already exists.`,
       };
 
-    const npmPackageNameValidation = validateNpmPackageName(
-      this.params.templateName,
-    );
+    const npmPackageNameValidation = validateNpmPackageName(templateName);
 
     if (!npmPackageNameValidation.validForNewPackages)
       return {

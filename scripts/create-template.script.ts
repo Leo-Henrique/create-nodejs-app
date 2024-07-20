@@ -4,7 +4,7 @@ import { TEMPLATES_PATH } from "@/config";
 import { successLog } from "@/utils/logs";
 import { onCancelPrompt } from "@/utils/on-cancel";
 import { FileNameValidation } from "@/validations/file-name.validation";
-import { TemplateNameValidation } from "@/validations/template-name-validation";
+import { TemplateNameValidation } from "@/validations/template-name.validation";
 import { rename } from "fs/promises";
 import { extname, resolve } from "path";
 import { cyan } from "picocolors";
@@ -15,63 +15,79 @@ interface CreateTemplateScriptOptions {
 }
 
 export async function createTemplateScript(
-  templateName: string,
-  { mainFile }: CreateTemplateScriptOptions,
+  templateNameArgument: string,
+  options: CreateTemplateScriptOptions,
 ) {
-  const templateNameValidation = new TemplateNameValidation();
-  const fileNameValidation = new FileNameValidation();
+  const input = {
+    templateName: {
+      value: templateNameArgument,
+      validation: TemplateNameValidation.create({
+        templateName: templateNameArgument,
+      }),
+    },
+    mainFile: {
+      value: options.mainFile,
+      validation: FileNameValidation.create({
+        fileName: options.mainFile,
+      }),
+    },
+  };
+  const inputFields = Object.keys(input) as (keyof typeof input)[];
 
-  if (templateName) {
-    await templateNameValidation.fromCli({ templateName });
-  } else {
-    const response = await prompts(
+  for (const field of inputFields) {
+    const fieldData = input[field];
+
+    if (fieldData.value) await fieldData.validation.fromCli();
+  }
+
+  const { templateName, mainFile } = input;
+
+  const promptsResponse = await prompts(
+    [
       {
-        type: "text",
+        type: !templateName.value ? "text" : null,
         name: "templateName",
         message: "Template name:",
         validate: async val =>
-          await templateNameValidation.fromPrompt({ templateName: val }),
+          await templateName.validation.fromPrompt({ templateName: val }),
       },
-      { onCancel: onCancelPrompt },
-    );
-
-    templateName = response.templateName;
-  }
-
-  if (mainFile) {
-    await fileNameValidation.fromCli({ fileName: mainFile });
-  } else {
-    const response = await prompts(
       {
-        type: "text",
+        type: !mainFile.value ? "text" : null,
         name: "mainFile",
         message: `Main file name (program input file, example: "index")`,
         initial: "index.ts",
         validate: async val =>
-          await fileNameValidation.fromPrompt({ fileName: val }),
+          await mainFile.validation.fromPrompt({ fileName: val }),
       },
-      { onCancel: onCancelPrompt },
-    );
+    ],
+    { onCancel: onCancelPrompt },
+  );
 
-    mainFile = response.mainFile;
+  for (const field of inputFields) {
+    const promptFieldResponse = promptsResponse[field];
+
+    if (promptFieldResponse) input[field].value = promptFieldResponse;
   }
 
-  mainFile = mainFile.replace(extname(mainFile), "");
+  mainFile.value = mainFile.value.replace(extname(mainFile.value), "");
 
-  const generatedAppPath = resolve(TEMPLATES_PATH, templateName);
+  const generatedTemplatePath = resolve(TEMPLATES_PATH, templateName.value);
 
-  await copyTemplateCompose(generatedAppPath, "clean");
+  await copyTemplateCompose(generatedTemplatePath, "clean");
 
-  if (mainFile !== "index") {
-    const defaultMainFilePath = resolve(generatedAppPath, "./src/index.ts");
+  if (mainFile.value !== "index") {
+    const defaultMainFilePath = resolve(
+      generatedTemplatePath,
+      "./src/index.ts",
+    );
     const newMainFilePath = resolve(
-      generatedAppPath,
+      generatedTemplatePath,
       "./src",
       `${mainFile}.ts`,
     );
 
-    const packageJsonPath = resolve(generatedAppPath, "package.json");
-    const buildConfigPath = resolve(generatedAppPath, "build.config.ts");
+    const packageJsonPath = resolve(generatedTemplatePath, "package.json");
+    const buildConfigPath = resolve(generatedTemplatePath, "build.config.ts");
 
     await Promise.all([
       rename(defaultMainFilePath, newMainFilePath),
@@ -86,7 +102,7 @@ export async function createTemplateScript(
   }
 
   successLog(
-    `Success in creating new template ${cyan(templateName)}!`,
-    `> ${generatedAppPath}`,
+    `Success in creating new template ${cyan(templateName.value)}!`,
+    `> ${generatedTemplatePath}`,
   );
 }

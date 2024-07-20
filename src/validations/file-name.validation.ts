@@ -7,9 +7,8 @@ interface FileNameValidationParams {
 }
 
 export class FileNameValidation extends Validation<FileNameValidationParams> {
-  public params!: FileNameValidationParams;
-  public constructor() {
-    super();
+  public static create(params: FileNameValidationParams) {
+    return new this().createValidation(params);
   }
 
   async validate(): Promise<ValidationResult> {
