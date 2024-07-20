@@ -1,4 +1,4 @@
-import { Validation, ValidationResult } from "@/core/validations";
+import { Validation, ValidationResult } from "@/core/validation";
 import { extname } from "path";
 import { z } from "zod";
 

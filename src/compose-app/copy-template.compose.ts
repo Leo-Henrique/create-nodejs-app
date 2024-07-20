@@ -1,9 +1,12 @@
-import { Templates } from "@/core/templates";
 import { TEMPLATES_PATH } from "@/config";
+import { ValidFrameworks } from "@/validations/framework.validation";
 import { cp } from "fs/promises";
 import { basename, resolve } from "path";
 
-export async function copyTemplateCompose(path: string, template: Templates) {
+export async function copyTemplateCompose(
+  path: string,
+  template: "clean" | ValidFrameworks,
+) {
   const ignore = (path: string, basenames: string[]) => {
     for (const name of basenames) {
       if (basename(path) === name) return true;

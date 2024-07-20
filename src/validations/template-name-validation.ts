@@ -1,5 +1,5 @@
 import { TEMPLATES_PATH } from "@/config";
-import { Validation, ValidationResult } from "@/core/validations";
+import { Validation, ValidationResult } from "@/core/validation";
 import { toPascalCase } from "@/utils/to-pascal-case";
 import { readdir } from "fs/promises";
 import validateNpmPackageName from "validate-npm-package-name";

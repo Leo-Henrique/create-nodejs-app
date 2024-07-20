@@ -6,9 +6,16 @@ export type ValidationResult =
     }
   | { isValid: false; issue: string };
 
-export abstract class Validation<Params = object> {
-  abstract params?: Params;
+export abstract class Validation<Params> {
+  protected params!: Params;
+
   abstract validate(): Promise<ValidationResult>;
+
+  protected createValidation(params?: Params) {
+    if (params) this.params = params;
+
+    return this as unknown as Omit<this, "validate">;
+  }
 
   public async fromCli(params?: Params) {
     if (params) this.params = params;
