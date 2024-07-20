@@ -32,6 +32,8 @@
     "format": "prettier . --write --cache",
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
+    "test:e2e": "vitest run --config ./vitest.config.e2e.mts",
+    "test:e2e:watch": "vitest --config ./vitest.config.e2e.mts",
     "test:coverage": "vitest run --coverage.enabled=true --coverage.all=false",
     "template": "tsx ./scripts/template-cli.ts",
     "prebuild": "rimraf ./dist",
