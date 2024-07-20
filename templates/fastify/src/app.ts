@@ -22,7 +22,7 @@ app.setSerializerCompiler(serializerCompiler);
 app.register(fastifySwagger, {
   openapi: {
     info: {
-      title: env.API_NAME,
+      title: env.API_NAME ?? "",
       description: process.env.npm_package_description ?? "",
       version: process.env.npm_package_version ?? "",
     },

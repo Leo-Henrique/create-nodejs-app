@@ -1,1 +1,4 @@
-console.log("Hello world!");
+import { env } from "./env";
+
+console.log(`Hello world!`);
+console.log(`\nEnvironment variables`, env);
