@@ -1,6 +1,11 @@
-import { CLEAN_TEMPLATE_PATH, GENERATED_APP_TARGET_ROOT_PATH } from "@/config";
+import {
+  CLEAN_TEMPLATE_PATH,
+  GENERATED_APP_TARGET_ROOT_PATH,
+  TEMPLATES_PATH,
+} from "@/config";
 import { execSync } from "child_process";
 import { randomUUID } from "crypto";
+import { existsSync } from "fs";
 import { readdir, rm } from "fs/promises";
 import { resolve } from "path";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -23,14 +28,14 @@ describe("[CLI] should be able to run and use program with a cli", () => {
   });
 
   beforeEach(async () => {
-    await rm(resolve(GENERATED_APP_TARGET_ROOT_PATH, projectName), {
+    await rm(resolve(GENERATED_APP_TARGET_ROOT_PATH), {
       recursive: true,
       force: true,
     });
   });
 
   afterEach(async () => {
-    await rm(resolve(GENERATED_APP_TARGET_ROOT_PATH, projectName), {
+    await rm(resolve(GENERATED_APP_TARGET_ROOT_PATH), {
       recursive: true,
       force: true,
     });
@@ -38,41 +43,37 @@ describe("[CLI] should be able to run and use program with a cli", () => {
 
   it("should be able to create a project with a cli", async () => {
     const sut = run([
-      "--name",
       projectName,
       "--package-manager",
       "pnpm",
       "--template",
       "clean",
     ]);
+    const folderNamesOfTargetFolder = await readdir(
+      GENERATED_APP_TARGET_ROOT_PATH,
+    );
 
     expect(sut).toContain(SUCCESS_MESSAGE);
-
-    // eslint-disable-next-line prefer-const
-    let [folderNamesOfTargetFolder, cleanTemplateFiles, generatedProjectFiles] =
-      await Promise.all([
-        readdir(GENERATED_APP_TARGET_ROOT_PATH),
-        readdir(CLEAN_TEMPLATE_PATH),
-        readdir(resolve(GENERATED_APP_TARGET_ROOT_PATH, projectName)),
-      ]);
-
     expect(folderNamesOfTargetFolder).toEqual(
       expect.arrayContaining([projectName]),
     );
+  });
 
-    cleanTemplateFiles = cleanTemplateFiles.filter(path => {
-      const ignorePaths = [
-        "node_modules",
-        "pnpm-lock.yaml",
-        ".env",
-        "dist",
-        ".eslintcache",
-      ];
+  it("should be able to create a project with a custom directory", async () => {
+    const customPath = `e2e-test-${randomUUID()}/folder/${projectName}`;
+    const sut = run([
+      customPath,
+      "--package-manager",
+      "pnpm",
+      "--template",
+      "clean",
+    ]);
+    const hasGeneratedProjectPath = existsSync(
+      resolve(GENERATED_APP_TARGET_ROOT_PATH, customPath),
+    );
 
-      return !ignorePaths.includes(path);
-    });
-
-    expect(generatedProjectFiles).toEqual(cleanTemplateFiles);
+    expect(sut).toContain(SUCCESS_MESSAGE);
+    expect(hasGeneratedProjectPath).toBeTruthy();
   });
 
   it("should be able to prompt project name if no arguments or options supplied", async () => {
@@ -82,20 +83,19 @@ describe("[CLI] should be able to run and use program with a cli", () => {
   });
 
   it("should be able to prompt package manager if not supplied", async () => {
-    const sut = run(["--name", projectName]);
+    const sut = run([projectName]);
 
     expect(sut).toContain(PACKAGE_MANAGER_QUESTION);
   });
 
   it("should be able to prompt template if not supplied", async () => {
-    const sut = run(["--name", projectName, "--package-manager", "pnpm"]);
+    const sut = run([projectName, "--package-manager", "pnpm"]);
 
     expect(sut).toContain(TEMPLATE_QUESTION);
   });
 
   it("should be able to prompt framework if not supplied and template is 'api'", async () => {
     const sut = run([
-      "--name",
       projectName,
       "--package-manager",
       "pnpm",
@@ -108,7 +108,6 @@ describe("[CLI] should be able to run and use program with a cli", () => {
 
   it("should not be able to prompt framework if template is 'clean'", async () => {
     const sut = run([
-      "--name",
       projectName,
       "--package-manager",
       "pnpm",
@@ -117,5 +116,75 @@ describe("[CLI] should be able to run and use program with a cli", () => {
     ]);
 
     expect(sut).toContain(SUCCESS_MESSAGE);
+  });
+
+  describe("Variants", () => {
+    it("should be able to create a project with a clean template", async () => {
+      const sut = run([
+        projectName,
+        "--package-manager",
+        "pnpm",
+        "--template",
+        "clean",
+      ]);
+
+      expect(sut).toContain(SUCCESS_MESSAGE);
+
+      let [
+        cleanTemplateFiles,
+        generatedProjectFiles, // eslint-disable-line prefer-const
+      ] = await Promise.all([
+        readdir(CLEAN_TEMPLATE_PATH),
+        readdir(resolve(GENERATED_APP_TARGET_ROOT_PATH, projectName)),
+      ]);
+
+      cleanTemplateFiles = cleanTemplateFiles.filter(path => {
+        const ignorePaths = [
+          "node_modules",
+          "pnpm-lock.yaml",
+          ".env",
+          "dist",
+          ".eslintcache",
+        ];
+
+        return !ignorePaths.includes(path);
+      });
+
+      expect(generatedProjectFiles).toEqual(cleanTemplateFiles);
+    });
+
+    it("should be able to create a project with a fastify framework", async () => {
+      const sut = run([
+        projectName,
+        "--package-manager",
+        "pnpm",
+        "--framework",
+        "fastify",
+      ]);
+
+      expect(sut).toContain(SUCCESS_MESSAGE);
+
+      let [
+        fastifyTemplateFiles,
+        generatedProjectFiles, // eslint-disable-line prefer-const
+      ] = await Promise.all([
+        readdir(resolve(TEMPLATES_PATH, "fastify")),
+        readdir(resolve(GENERATED_APP_TARGET_ROOT_PATH, projectName)),
+      ]);
+
+      fastifyTemplateFiles = fastifyTemplateFiles.filter(path => {
+        const ignorePaths = [
+          "node_modules",
+          "pnpm-lock.yaml",
+          ".env",
+          "dist",
+          ".eslintcache",
+        ];
+
+        return !ignorePaths.includes(path);
+      });
+
+      expect(generatedProjectFiles).toEqual(fastifyTemplateFiles);
+    });
   });
 });

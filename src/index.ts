@@ -2,7 +2,7 @@
 import "./config";
 
 import { Command } from "commander";
-import { resolve } from "path";
+import { basename, resolve } from "path";
 import { cyan } from "picocolors";
 import prompts, { Choice } from "prompts";
 import packageJson from "../package.json";
@@ -29,7 +29,6 @@ import {
 } from "./validations/template.validation";
 
 interface CliOptions {
-  name: string;
   packageManager: ValidPackageManagers;
   template: ValidTemplates;
   framework: ValidFrameworks;
@@ -42,10 +41,8 @@ const program = new Command()
 program
   .argument(
     "[project-directory]",
-    "Directory of the project from where the script was called.",
-    ".",
+    "Name of the project or relative path of the project considering where the script was called.",
   )
-  .option("-n, --name <project-name>", "Name of the project.")
   .option(
     "--package-manager <package-manager>",
     "Package manager that will be used in the project.",
@@ -58,13 +55,12 @@ program
     "-f, --framework <framework-name>",
     "Framework that will be used in the project.",
   )
-  .action(async (directory, options: CliOptions) => {
+  .action(async (projectDirectoryArgument, options: CliOptions) => {
     const input = {
-      projectName: {
-        value: options.name,
+      projectDirectory: {
+        value: projectDirectoryArgument,
         validation: ProjectNameValidation.create({
-          name: options.name,
-          directory,
+          path: projectDirectoryArgument,
         }),
       },
       packageManager: {
@@ -94,19 +90,16 @@ program
       if (fieldData.value) await fieldData.validation.fromCli();
     }
 
-    const { projectName, packageManager, template, framework } = input;
+    const { projectDirectory, packageManager, template, framework } = input;
 
     const promptsResponse = await prompts(
       [
         {
-          type: !projectName.value ? "text" : null,
-          name: "projectName",
+          type: !projectDirectory.value ? "text" : null,
+          name: "projectDirectory",
           message: "What is your project name?",
           validate: async val =>
-            await projectName.validation.fromPrompt({
-              name: val,
-              directory: directory,
-            }),
+            await projectDirectory.validation.fromPrompt({ path: val }),
         },
         {
           type: !packageManager.value ? "select" : null,
@@ -147,32 +140,36 @@ program
 
     if (framework.value) input.template.value = "api";
 
-    const targetAppPath = resolve(
+    const projectName = basename(projectDirectory.value);
+
+    projectDirectory.value = resolve(
       GENERATED_APP_TARGET_ROOT_PATH,
-      projectName.value,
+      projectDirectory.value,
     );
 
-    await copyTemplateCompose(targetAppPath, framework.value ?? "clean");
+    await copyTemplateCompose(
+      projectDirectory.value,
+      framework.value ?? "clean",
+    );
 
-    const packageJsonPath = resolve(targetAppPath, "package.json");
-    const envExamplePath = resolve(targetAppPath, ".env.example");
-    const huskyPreCommitPath = resolve(targetAppPath, ".husky/pre-commit");
+    const packageJsonPath = resolve(projectDirectory.value, "package.json");
+    const envExamplePath = resolve(projectDirectory.value, ".env.example");
+    const huskyPreCommitPath = resolve(
+      projectDirectory.value,
+      ".husky/pre-commit",
+    );
 
     await Promise.all([
-      replaceContentInFileCompose(packageJsonPath, [
-        ["app-name", projectName.value],
-      ]),
-      replaceContentInFileCompose(envExamplePath, [
-        ["app-name", projectName.value],
-      ]),
+      replaceContentInFileCompose(packageJsonPath, [["app-name", projectName]]),
+      replaceContentInFileCompose(envExamplePath, [["app-name", projectName]]),
       replaceContentInFileCompose(huskyPreCommitPath, [
         ["pnpm", packageManager.value],
       ]),
     ]);
 
     successLog(
-      `Success in creating new app ${cyan(projectName.value)}!`,
-      `> ${targetAppPath}`,
+      `Success in creating new app ${cyan(projectName)}!`,
+      `> ${projectDirectory.value}`,
     );
   });
 

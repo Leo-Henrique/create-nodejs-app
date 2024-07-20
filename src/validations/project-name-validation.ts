@@ -1,13 +1,13 @@
 import { GENERATED_APP_TARGET_ROOT_PATH } from "@/config";
 import { Validation, ValidationResult } from "@/core/validation";
 import { toPascalCase } from "@/utils/to-pascal-case";
+import { existsSync } from "fs";
 import { readdir } from "fs/promises";
-import { resolve } from "path";
+import { basename, resolve } from "path";
 import validateNpmPackageName from "validate-npm-package-name";
 
 interface ProjectNameValidationParams {
-  name: string;
-  directory: string;
+  path: string;
 }
 
 export class ProjectNameValidation extends Validation<ProjectNameValidationParams> {
@@ -16,16 +16,19 @@ export class ProjectNameValidation extends Validation<ProjectNameValidationParam
   }
 
   async validate(): Promise<ValidationResult> {
-    const { name, directory } = this.params;
+    const { path } = this.params;
+    const name = basename(path);
+    const targetPath = resolve(GENERATED_APP_TARGET_ROOT_PATH, path);
 
-    const targetPath = resolve(GENERATED_APP_TARGET_ROOT_PATH, directory);
-    const alreadyExistingFolderNames = await readdir(targetPath);
+    if (existsSync(targetPath)) {
+      const alreadyExistingFolderNames = await readdir(targetPath);
 
-    if (alreadyExistingFolderNames.includes(name))
-      return {
-        isValid: false,
-        issue: `Folder with name "${name}" already exists in project directory.`,
-      };
+      if (alreadyExistingFolderNames.includes(name))
+        return {
+          isValid: false,
+          issue: `Folder with name "${name}" already exists in project directory.`,
+        };
+    }
 
     const npmPackageNameValidation = validateNpmPackageName(name);
 
