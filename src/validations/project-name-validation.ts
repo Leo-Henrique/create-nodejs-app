@@ -1,6 +1,6 @@
 import { GENERATED_APP_TARGET_ROOT_PATH } from "@/config";
 import { Validation, ValidationResult } from "@/core/validation";
-import { toPascalCase } from "@/utils/to-pascal-case";
+import { capitalizeFirstWord } from "@/utils/capitalize-first-word";
 import { existsSync } from "fs";
 import { readdir } from "fs/promises";
 import { basename, resolve } from "path";
@@ -35,7 +35,7 @@ export class ProjectNameValidation extends Validation<ProjectNameValidationParam
     if (!npmPackageNameValidation.validForNewPackages)
       return {
         isValid: false,
-        issue: toPascalCase(npmPackageNameValidation.errors![0]),
+        issue: capitalizeFirstWord(npmPackageNameValidation.errors![0]),
       };
 
     return { isValid: true };

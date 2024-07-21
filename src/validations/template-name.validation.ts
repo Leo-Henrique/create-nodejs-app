@@ -1,6 +1,6 @@
 import { TEMPLATES_PATH } from "@/config";
 import { Validation, ValidationResult } from "@/core/validation";
-import { toPascalCase } from "@/utils/to-pascal-case";
+import { capitalizeFirstWord } from "@/utils/capitalize-first-word";
 import { readdir } from "fs/promises";
 import validateNpmPackageName from "validate-npm-package-name";
 
@@ -29,7 +29,7 @@ export class TemplateNameValidation extends Validation<TemplateNameValidationPar
     if (!npmPackageNameValidation.validForNewPackages)
       return {
         isValid: false,
-        issue: toPascalCase(npmPackageNameValidation.errors![0]),
+        issue: capitalizeFirstWord(npmPackageNameValidation.errors![0]),
       };
 
     return { isValid: true };

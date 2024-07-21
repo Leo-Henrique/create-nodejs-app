@@ -2,7 +2,7 @@ import { TEMPLATES_PATH } from "@/config";
 import { left } from "@/utils/left";
 import { successLog } from "@/utils/logs";
 import { onCancelPrompt } from "@/utils/on-cancel";
-import { toPascalCase } from "@/utils/to-pascal-case";
+import { capitalizeFirstWord } from "@/utils/capitalize-first-word";
 import { execSync } from "child_process";
 import { readdirSync } from "fs";
 import { readdir } from "fs/promises";
@@ -26,7 +26,7 @@ export async function openTemplateScript(templateName: string) {
           const templateNames = readdirSync(TEMPLATES_PATH);
 
           return templateNames.map(name => ({
-            title: toPascalCase(name),
+            title: capitalizeFirstWord(name),
             value: name,
           }));
         },
