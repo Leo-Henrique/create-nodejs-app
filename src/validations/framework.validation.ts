@@ -9,6 +9,7 @@ export const frameworks = [
   {
     title: "Nest",
     value: "nest",
+    disabled: true,
   },
   {
     title: "tRPC",
