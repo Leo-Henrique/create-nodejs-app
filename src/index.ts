@@ -44,7 +44,7 @@ program
     "Name of the project or relative path of the project considering where the script was called.",
   )
   .option(
-    "--package-manager <package-manager>",
+    "-pm, --package-manager <package-manager>",
     "Package manager that will be used in the project.",
   )
   .option(
