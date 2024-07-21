@@ -35,6 +35,7 @@ export default defineBuildConfig({
       entryFileNames: "[name].js",
       preserveModules: true,
       strict: false,
+      exports: "named",
     },
     esbuild: {
       minify: true,

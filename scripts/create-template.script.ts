@@ -3,73 +3,106 @@ import { replaceContentInFileCompose } from "@/compose-app/replace-content-in-fi
 import { TEMPLATES_PATH } from "@/config";
 import { successLog } from "@/utils/logs";
 import { onCancelPrompt } from "@/utils/on-cancel";
-import { filenameValidation } from "@/validations/filename.validation";
-import { packageNameValidation } from "@/validations/package-name.validation";
-import { readdir, rename } from "fs/promises";
+import { FileNameValidation } from "@/validations/file-name.validation";
+import { TemplateNameValidation } from "@/validations/template-name.validation";
+import { rename } from "fs/promises";
 import { extname, resolve } from "path";
 import { cyan } from "picocolors";
 import prompts from "prompts";
 
-type Questions = "templateName" | "mainFilename";
+interface CreateTemplateScriptOptions {
+  mainFile: string;
+}
 
-const questions: Array<prompts.PromptObject<Questions>> = [
-  {
-    type: "text",
-    name: "templateName",
-    message: "Template name:",
-    validate: async value => {
-      const templateNamesThatAlreadyExists = await readdir(TEMPLATES_PATH);
-
-      if (templateNamesThatAlreadyExists.includes(value)) {
-        return "Template already exists.";
-      }
-
-      return packageNameValidation(value);
+export async function createTemplateScript(
+  templateNameArgument: string,
+  options: CreateTemplateScriptOptions,
+) {
+  const input = {
+    templateName: {
+      value: templateNameArgument,
+      validation: TemplateNameValidation.create({
+        templateName: templateNameArgument,
+      }),
     },
-  },
-  {
-    type: "text",
-    name: "mainFilename",
-    message: `Main filename (from "src" root folder):`,
-    initial: "index.ts",
-    format: value => value.replace(extname(value), ""),
-    validate: filenameValidation,
-  },
-];
+    mainFile: {
+      value: options.mainFile,
+      validation: FileNameValidation.create({
+        fileName: options.mainFile,
+      }),
+    },
+  };
+  const inputFields = Object.keys(input) as (keyof typeof input)[];
 
-(async () => {
-  const response = await prompts(questions, {
-    onCancel: onCancelPrompt,
-  });
-  const generatedAppPath = resolve(TEMPLATES_PATH, response.templateName);
+  for (const field of inputFields) {
+    const fieldData = input[field];
 
-  await copyTemplateCompose(generatedAppPath, "clean");
+    if (fieldData.value) await fieldData.validation.fromCli();
+  }
 
-  if (response.mainFilename !== "index") {
-    const defaultMainFilePath = resolve(generatedAppPath, "./src/index.ts");
+  const { templateName, mainFile } = input;
+
+  const promptsResponse = await prompts(
+    [
+      {
+        type: !templateName.value ? "text" : null,
+        name: "templateName",
+        message: "Template name:",
+        validate: async val =>
+          await templateName.validation.fromPrompt({ templateName: val }),
+      },
+      {
+        type: !mainFile.value ? "text" : null,
+        name: "mainFile",
+        message: `Main file name (program input file, example: "index")`,
+        initial: "index.ts",
+        validate: async val =>
+          await mainFile.validation.fromPrompt({ fileName: val }),
+      },
+    ],
+    { onCancel: onCancelPrompt },
+  );
+
+  for (const field of inputFields) {
+    const promptFieldResponse = promptsResponse[field];
+
+    if (promptFieldResponse) input[field].value = promptFieldResponse;
+  }
+
+  mainFile.value = mainFile.value.replace(extname(mainFile.value), "");
+
+  const generatedTemplatePath = resolve(TEMPLATES_PATH, templateName.value);
+
+  await copyTemplateCompose(generatedTemplatePath, "clean");
+
+  if (mainFile.value !== "index") {
+    const defaultMainFilePath = resolve(
+      generatedTemplatePath,
+      "./src/index.ts",
+    );
     const newMainFilePath = resolve(
-      generatedAppPath,
+      generatedTemplatePath,
       "./src",
-      `${response.mainFilename}.ts`,
+      `${mainFile}.ts`,
     );
 
-    const packageJsonPath = resolve(generatedAppPath, "package.json");
-    const buildConfigPath = resolve(generatedAppPath, "build.config.ts");
+    const packageJsonPath = resolve(generatedTemplatePath, "package.json");
+    const buildConfigPath = resolve(generatedTemplatePath, "build.config.ts");
 
     await Promise.all([
       rename(defaultMainFilePath, newMainFilePath),
       replaceContentInFileCompose(packageJsonPath, [
-        ["index.js", `${response.mainFilename}.js`],
-        ["index.ts", `${response.mainFilename}.ts`],
+        ["index.js", `${mainFile}.js`],
+        ["index.ts", `${mainFile}.ts`],
       ]),
       replaceContentInFileCompose(buildConfigPath, [
-        ["index.ts", `${response.mainFilename}.ts`],
+        ["index.ts", `${mainFile}.ts`],
       ]),
     ]);
   }
 
   successLog(
-    `Success in creating new template ${cyan(response.templateName)}!`,
-    `> ${generatedAppPath}`,
+    `Success in creating new template ${cyan(templateName.value)}!`,
+    `> ${generatedTemplatePath}`,
   );
-})();
+}

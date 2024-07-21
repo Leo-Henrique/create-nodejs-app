@@ -8,7 +8,7 @@ jobs:
 
     strategy:
       matrix:
-        project: [./templates/fastify]
+        project: [., ./templates/fastify]
 
     name: E2E tests (${{ matrix.project }})
 

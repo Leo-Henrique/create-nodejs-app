@@ -1,111 +1,178 @@
 #!/usr/bin/env node
 import "./config";
 
-import { successLog } from "@/utils/logs";
-import { onCancelPrompt } from "@/utils/on-cancel";
-import { existsSync } from "fs";
-import { mkdir, readdir } from "fs/promises";
-import { resolve } from "path";
+import { Command } from "commander";
+import { basename, resolve } from "path";
 import { cyan } from "picocolors";
-import prompts, { PromptType } from "prompts";
+import prompts, { Choice } from "prompts";
+import packageJson from "../package.json";
 import { copyTemplateCompose } from "./compose-app/copy-template.compose";
 import { replaceContentInFileCompose } from "./compose-app/replace-content-in-file.compose";
-import { GENERATED_APP_ROOT_PATH } from "./config";
-import { packageNameValidation } from "./validations/package-name.validation";
+import { GENERATED_APP_TARGET_ROOT_PATH } from "./config";
+import { successLog } from "./utils/logs";
+import { onCancelPrompt } from "./utils/on-cancel";
+import {
+  FrameworkValidation,
+  ValidFrameworks,
+  frameworks,
+} from "./validations/framework.validation";
+import {
+  PackageManagerValidation,
+  ValidPackageManagers,
+  packageManagers,
+} from "./validations/package-manager.validation";
+import { ProjectNameValidation } from "./validations/project-name-validation";
+import {
+  TemplateValidation,
+  ValidTemplates,
+  templates,
+} from "./validations/template.validation";
 
-type Questions = "projectName" | "packageManager" | "template" | "framework";
+interface CliOptions {
+  packageManager: ValidPackageManagers;
+  template: ValidTemplates;
+  framework: ValidFrameworks;
+}
 
-const isApiTemplate = (type: PromptType) => {
-  return (_: string, answers: prompts.Answers<Questions>) => {
-    return answers.template === "api" ? type : null;
-  };
-};
+const program = new Command()
+  .name(packageJson.name)
+  .description(packageJson.description);
 
-const questions: Array<prompts.PromptObject<Questions>> = [
-  {
-    type: "text",
-    name: "projectName",
-    message: "What is your project name?",
-    validate: async val => {
-      const generatedAppNames = await readdir(GENERATED_APP_ROOT_PATH);
+program
+  .argument(
+    "[project-directory]",
+    "Name of the project or relative path of the project considering where the script was called.",
+  )
+  .option(
+    "--package-manager <package-manager>",
+    "Package manager that will be used in the project.",
+  )
+  .option(
+    "-t, --template <template-name>",
+    "Template that will be used in the project.",
+  )
+  .option(
+    "-f, --framework <framework-name>",
+    "Framework that will be used in the project.",
+  )
+  .action(async (projectDirectoryArgument, options: CliOptions) => {
+    const input = {
+      projectDirectory: {
+        value: projectDirectoryArgument,
+        validation: ProjectNameValidation.create({
+          path: projectDirectoryArgument,
+        }),
+      },
+      packageManager: {
+        value: options.packageManager,
+        validation: PackageManagerValidation.create({
+          packageManager: options.packageManager,
+        }),
+      },
+      template: {
+        value: options.template,
+        validation: TemplateValidation.create({
+          template: options.template,
+        }),
+      },
+      framework: {
+        value: options.framework,
+        validation: FrameworkValidation.create({
+          framework: options.framework,
+        }),
+      },
+    };
+    const inputFields = Object.keys(input) as (keyof typeof input)[];
 
-      if (generatedAppNames.includes(val)) {
-        return "Already exists a folder with same name in current directory.";
-      }
+    for (const field of inputFields) {
+      const fieldData = input[field];
 
-      return packageNameValidation(val);
-    },
-  },
-  {
-    type: "select",
-    name: "packageManager",
-    message: "What is your favorite package manager?",
-    choices: [
-      { title: "NPM", value: "npm" },
-      { title: "Yarn", value: "yarn" },
-      { title: "PNPM", value: "pnpm" },
-    ],
-    initial: 2,
-  },
-  {
-    type: "select",
-    name: "template",
-    message: "Select your template:",
-    choices: [
-      { title: "Clean", value: "clean" },
-      { title: "API", value: "api" },
-    ],
-  },
-  {
-    type: isApiTemplate("select"),
-    name: "framework",
-    message: "What is your favorite framework:",
-    choices: [
-      { title: "Fastify", value: "fastify" },
-      { title: "Nest", value: "nest", disabled: true },
-      { title: "tRPC", value: "trpc", disabled: true },
-    ],
-    initial: 0,
-  },
-];
+      if (fieldData.value) await fieldData.validation.fromCli();
+    }
+
+    const { projectDirectory, packageManager, template, framework } = input;
+
+    const promptsResponse = await prompts(
+      [
+        {
+          type: !projectDirectory.value ? "text" : null,
+          name: "projectDirectory",
+          message: "What is your project name?",
+          validate: async val =>
+            await projectDirectory.validation.fromPrompt({ path: val }),
+        },
+        {
+          type: !packageManager.value ? "select" : null,
+          name: "packageManager",
+          message: "What is your favorite package manager?",
+          choices: packageManagers as unknown as Choice[],
+          initial: 2,
+        },
+        {
+          type: !template.value && !framework.value ? "select" : null,
+          name: "template",
+          message: "Select your template:",
+          choices: templates as unknown as Choice[],
+        },
+        {
+          type: (_, answers) => {
+            if (
+              !framework.value &&
+              (template.value === "api" || answers.template === "api")
+            )
+              return "select";
+
+            return null;
+          },
+          name: "framework",
+          message: "What is your favorite framework?",
+          choices: frameworks as unknown as Choice[],
+        },
+      ],
+      { onCancel: onCancelPrompt },
+    );
+
+    for (const field of inputFields) {
+      const promptFieldResponse = promptsResponse[field];
+
+      if (promptFieldResponse) input[field].value = promptFieldResponse;
+    }
+
+    if (framework.value) input.template.value = "api";
+
+    const projectName = basename(projectDirectory.value);
+
+    projectDirectory.value = resolve(
+      GENERATED_APP_TARGET_ROOT_PATH,
+      projectDirectory.value,
+    );
+
+    await copyTemplateCompose(
+      projectDirectory.value,
+      framework.value ?? "clean",
+    );
+
+    const packageJsonPath = resolve(projectDirectory.value, "package.json");
+    const envExamplePath = resolve(projectDirectory.value, ".env.example");
+    const huskyPreCommitPath = resolve(
+      projectDirectory.value,
+      ".husky/pre-commit",
+    );
+
+    await Promise.all([
+      replaceContentInFileCompose(packageJsonPath, [["app-name", projectName]]),
+      replaceContentInFileCompose(envExamplePath, [["app-name", projectName]]),
+      replaceContentInFileCompose(huskyPreCommitPath, [
+        ["pnpm", packageManager.value],
+      ]),
+    ]);
+
+    successLog(
+      `Success in creating new app ${cyan(projectName)}!`,
+      `> ${projectDirectory.value}`,
+    );
+  });
 
 (async () => {
-  if (
-    process.env.NODE_ENV === "development" &&
-    !existsSync(GENERATED_APP_ROOT_PATH)
-  ) {
-    await mkdir(GENERATED_APP_ROOT_PATH, { recursive: true });
-  }
-
-  const response = await prompts(questions, { onCancel: onCancelPrompt });
-  const generatedAppPath = resolve(
-    GENERATED_APP_ROOT_PATH,
-    response.projectName,
-  );
-
-  await copyTemplateCompose(
-    generatedAppPath,
-    response.framework ? response.framework : "clean",
-  );
-
-  const packageJsonPath = resolve(generatedAppPath, "package.json");
-  const envExamplePath = resolve(generatedAppPath, ".env.example");
-  const huskyPreCommitPath = resolve(generatedAppPath, ".husky/pre-commit");
-
-  await Promise.all([
-    replaceContentInFileCompose(packageJsonPath, [
-      ["app-name", response.projectName],
-    ]),
-    replaceContentInFileCompose(envExamplePath, [
-      ["app-name", response.projectName],
-    ]),
-    replaceContentInFileCompose(huskyPreCommitPath, [
-      ["pnpm", response.packageManager],
-    ]),
-  ]);
-
-  successLog(
-    `Success in creating new app ${cyan(response.projectName)}!`,
-    `> ${generatedAppPath}`,
-  );
+  await program.parseAsync(process.argv);
 })();

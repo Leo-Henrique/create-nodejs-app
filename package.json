@@ -32,14 +32,16 @@
     "format": "prettier . --write --cache",
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
+    "test:e2e": "vitest run --config ./vitest.config.e2e.mts",
+    "test:e2e:watch": "vitest --config ./vitest.config.e2e.mts",
     "test:coverage": "vitest run --coverage.enabled=true --coverage.all=false",
-    "template:create": "tsx ./scripts/create-template.script.ts",
-    "template:open": "tsx ./scripts/open-template.script.ts",
+    "template": "tsx ./scripts/template-cli.ts",
     "prebuild": "rimraf ./dist",
     "build": "unbuild",
     "prepublishOnly": "pnpm build"
   },
   "dependencies": {
+    "app-root-path": "3.1.0",
     "commander": "12.1.0",
     "picocolors": "1.0.1",
     "prompts": "2.4.2",
