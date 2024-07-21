@@ -27,8 +27,27 @@ With PNPM:
 pnpm create @leo-h/nodejs-app
 ```
 
+## CLI
+
+You can create the project non-interactively through the CLI. Arguments or options not provided will still be asked if it is mandatory information for creation.
+
+```bash
+Usage: @leo-h/create-nodejs-app [options] [project-directory]
+
+Arguments:
+  project-directory                    Name of the project or relative path of the project considering where the script was called.
+
+Options:
+  -pm, --package-manager <package-manager>  Package manager that will be used in the project.
+  -t, --template <template-name>       Template that will be used in the project.
+  -f, --framework <framework-name>     Framework that will be used in the project.
+  -h, --help                           display help for command
+```
+
 ## Features
 
 - **Fast**: All templates use [tsx](https://tsx.is/) to run Node.js with TypeScript and [unbuild](https://github.com/unjs/unbuild) to build the application. Both tools use [esbuild](https://esbuild.github.io/), an extremely fast packager also used by tools like [Vite](https://vitejs.dev/).
 
 - **Lint and code format**: All templates use [eslint](https://eslint.org/) to identify problems in the code and [prettier](https://prettier.io/) to ensure consistent code formatting. Both are integrated with [husky](https://typicode.github.io/husky/) and [lint-staged](https://github.com/lint-staged/lint-staged) to automatically run them before every commit you make with git.
+
+- **Tests**: To encourage the use of tests, all templates already have a pre-configured unit testing setup with [Vitest](https://vitest.dev/). The API templates also come with end-to-end usage example tests, including all utility tools like [Supertest](https://github.com/ladjs/supertest#readme) and [Faker.js](https://fakerjs.dev/).
