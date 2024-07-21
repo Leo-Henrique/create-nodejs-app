@@ -4,7 +4,10 @@
       "@semantic-release/commit-analyzer",
       {
         "preset": "angular",
-        "releaseRules": [{ "scope": "templates", "release": "patch" }]
+        "releaseRules": [
+          { "type": "feat", "release": "patch" },
+          { "scope": "templates", "release": "patch" }
+        ]
       }
     ],
     [
