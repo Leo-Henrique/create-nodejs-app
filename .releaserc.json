@@ -5,6 +5,8 @@
       {
         "preset": "angular",
         "releaseRules": [
+          { "type": "fix", "release": false },
+          { "type": "perf", "release": false },
           { "type": "feat", "release": "patch" },
           { "scope": "templates", "release": "patch" },
           { "scope": "cli", "release": "patch" },
