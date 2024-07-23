@@ -2,7 +2,7 @@ name: Release
 
 on:
   workflow_run:
-    workflows: ["Code check", "E2E tests"]
+    workflows: ["E2E tests"]
     types: [completed]
     branches:
       - "main"
