@@ -83,7 +83,7 @@ export async function createTemplateScript(
     const newMainFilePath = resolve(
       generatedTemplatePath,
       "./src",
-      `${mainFile}.ts`,
+      `${mainFile.value}.ts`,
     );
 
     const packageJsonPath = resolve(generatedTemplatePath, "package.json");
@@ -92,11 +92,11 @@ export async function createTemplateScript(
     await Promise.all([
       rename(defaultMainFilePath, newMainFilePath),
       replaceContentInFileCompose(packageJsonPath, [
-        ["index.js", `${mainFile}.js`],
-        ["index.ts", `${mainFile}.ts`],
+        ["index.js", `${mainFile.value}.js`],
+        ["index.ts", `${mainFile.value}.ts`],
       ]),
       replaceContentInFileCompose(buildConfigPath, [
-        ["index.ts", `${mainFile}.ts`],
+        ["index.ts", `${mainFile.value}.ts`],
       ]),
     ]);
   }
