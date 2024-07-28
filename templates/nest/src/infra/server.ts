@@ -3,6 +3,9 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from "@nestjs/platform-fastify";
+import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
+import multer from "fastify-multer";
+import packageJson from "package.json";
 import { AppModule } from "./app.module";
 import { env } from "./env";
 
@@ -16,6 +19,9 @@ import { env } from "./env";
       },
     },
   );
+
+  app.register(multer.contentParser);
+
   const swaggerDocumentConfig = new DocumentBuilder()
     .setTitle(env.API_NAME)
     .setDescription("")
