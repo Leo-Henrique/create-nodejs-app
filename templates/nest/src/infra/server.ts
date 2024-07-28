@@ -16,11 +16,27 @@ import { env } from "./env";
       },
     },
   );
+  const swaggerDocumentConfig = new DocumentBuilder()
+    .setTitle(env.API_NAME)
+    .setDescription("")
+    .setVersion(packageJson.version)
+    .build();
+  const swaggerDocument = SwaggerModule.createDocument(
+    app,
+    swaggerDocumentConfig,
+  );
+  const swaggerPath = "docs";
+
+  SwaggerModule.setup(swaggerPath, app, swaggerDocument, {
+    swaggerOptions: {
+      defaultModelsExpandDepth: -1,
+    },
+  });
 
   await app.listen(env.API_PORT, "0.0.0.0");
 
   console.log(`Application "${env.API_NAME}" is running!`);
 
   if (env.NODE_ENV === "development")
-    console.log(`http://localhost:${env.API_PORT}/docs`);
+    console.log(`http://localhost:${env.API_PORT}/${swaggerPath}`);
 })();
