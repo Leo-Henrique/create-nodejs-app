@@ -1,6 +1,8 @@
 import packageJson from "@/../package.json";
-import "dotenv/config";
+import { config } from "dotenv";
 import { z } from "zod";
+
+config({ override: true });
 
 const schema = z.object({
   NODE_ENV: z.enum(["test", "development", "production"]),
