@@ -176,7 +176,6 @@ export function UploadInterceptor(options: UploadInterceptorOptions) {
     } else {
       cb(
         new UploadValidationError(400, {
-          multerError: null,
           message: "Invalid file format.",
           fieldName: fieldname,
           allowedExtensions,

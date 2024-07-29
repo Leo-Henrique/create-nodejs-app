@@ -1,23 +1,17 @@
-import { HttpErrorPresenter } from "@/infra/presenters/error.presenter";
+import { ErrorPresenter } from "@/infra/presenters/error.presenter";
 import { HttpException } from "@nestjs/common";
 
-interface UploadValidationErrorDebug {
-  multerError: string | null;
-  message: string;
-}
+export class UploadValidationError extends HttpException {
+  constructor(statusCode = 400, debug: object = {}) {
+    const presenter = ErrorPresenter.toHttp(statusCode, {
+      error: "UploadValidationError",
+      message: "Os dados enviados são inválidos.",
+      debug: {
+        multerError: null,
+        ...debug,
+      },
+    });
 
-export class UploadValidationError<
-  Debug extends UploadValidationErrorDebug,
-> extends HttpException {
-  constructor(statusCode = 400, debug: Debug | null = null) {
-    super(
-      {
-        error: "UploadValidationError",
-        message: "Os dados enviados são inválidos.",
-        statusCode,
-        debug,
-      } satisfies HttpErrorPresenter,
-      statusCode,
-    );
+    super(presenter, statusCode);
   }
 }

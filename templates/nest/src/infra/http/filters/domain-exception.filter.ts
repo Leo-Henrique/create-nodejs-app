@@ -1,13 +1,14 @@
 import { DomainError } from "@/core/errors/domain-error";
 import { ValidationError } from "@/core/errors/errors";
 import { env } from "@/infra/env";
-import { HttpErrorPresenter } from "@/infra/presenters/error.presenter";
+import { ErrorPresenter } from "@/infra/presenters/error.presenter";
 import {
   ArgumentsHost,
   BadRequestException,
   Catch,
   ExceptionFilter,
   HttpException,
+  HttpStatus,
   InternalServerErrorException,
 } from "@nestjs/common";
 import { FastifyReply } from "fastify";
@@ -22,29 +23,31 @@ export class DomainExceptionFilter implements ExceptionFilter {
 
     switch (exception.constructor) {
       case ValidationError:
-        httpException = new BadRequestException({
-          error: exception.error,
-          message: exception.message,
-          statusCode: exception.HTTPStatusCode,
-          debug: exception.debug,
-        } satisfies HttpErrorPresenter);
+        httpException = new BadRequestException(
+          ErrorPresenter.toHttp(HttpStatus.BAD_REQUEST, exception),
+        );
         break;
 
       default:
-        httpException = new InternalServerErrorException({
-          error: "InternalServerError",
-          message: "Desculpe, um erro inesperado ocorreu.",
-          statusCode: 500,
-          debug: exception.message,
-        } satisfies HttpErrorPresenter);
+        httpException = new InternalServerErrorException(
+          ErrorPresenter.toHttp(HttpStatus.INTERNAL_SERVER_ERROR, {
+            error: "InternalServerError",
+            message: "Desculpe, um erro inesperado ocorreu.",
+            debug: exception.message,
+          }),
+        );
         break;
     }
 
-    if (env.NODE_ENV === "production" && "debug" in httpException)
-      delete exception.debug;
+    const httpResponse = httpException.getResponse();
 
-    response
-      .status(httpException.getStatus())
-      .send(httpException.getResponse());
+    if (
+      env.NODE_ENV === "production" &&
+      typeof httpResponse === "object" &&
+      "debug" in httpResponse
+    )
+      delete httpResponse.debug;
+
+    response.status(httpException.getStatus()).send(httpResponse);
   }
 }
