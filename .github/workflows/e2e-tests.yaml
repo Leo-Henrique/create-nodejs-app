@@ -13,7 +13,7 @@ jobs:
 
     strategy:
       matrix:
-        project: [., ./templates/fastify]
+        project: [., ./templates/fastify, ./templates/nest]
 
     name: E2E tests (${{ matrix.project }})
 

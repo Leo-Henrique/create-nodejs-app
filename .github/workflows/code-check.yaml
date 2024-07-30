@@ -8,7 +8,7 @@ jobs:
 
     strategy:
       matrix:
-        project: [., ./templates/clean, ./templates/fastify]
+        project: [., ./templates/clean, ./templates/fastify, ./templates/nest]
 
     name: Code check (${{ matrix.project }})
 

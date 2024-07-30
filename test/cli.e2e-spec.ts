@@ -119,6 +119,18 @@ describe("[CLI] should be able to run and use program with a cli", () => {
   });
 
   describe("Variants", () => {
+    const ignoreUnusedPaths = (paths: string[]) => {
+      return paths.filter(path => {
+        return ![
+          "node_modules",
+          "pnpm-lock.yaml",
+          ".env",
+          "dist",
+          ".eslintcache",
+        ].includes(path);
+      });
+    };
+
     it("should be able to create a project with a clean template", async () => {
       const sut = run([
         projectName,
@@ -138,17 +150,7 @@ describe("[CLI] should be able to run and use program with a cli", () => {
         readdir(resolve(GENERATED_APP_TARGET_ROOT_PATH, projectName)),
       ]);
 
-      cleanTemplateFiles = cleanTemplateFiles.filter(path => {
-        const ignorePaths = [
-          "node_modules",
-          "pnpm-lock.yaml",
-          ".env",
-          "dist",
-          ".eslintcache",
-        ];
-
-        return !ignorePaths.includes(path);
-      });
+      cleanTemplateFiles = ignoreUnusedPaths(cleanTemplateFiles);
 
       expect(generatedProjectFiles).toEqual(cleanTemplateFiles);
     });
@@ -172,19 +174,33 @@ describe("[CLI] should be able to run and use program with a cli", () => {
         readdir(resolve(GENERATED_APP_TARGET_ROOT_PATH, projectName)),
       ]);
 
-      fastifyTemplateFiles = fastifyTemplateFiles.filter(path => {
-        const ignorePaths = [
-          "node_modules",
-          "pnpm-lock.yaml",
-          ".env",
-          "dist",
-          ".eslintcache",
-        ];
-
-        return !ignorePaths.includes(path);
-      });
+      fastifyTemplateFiles = ignoreUnusedPaths(fastifyTemplateFiles);
 
       expect(generatedProjectFiles).toEqual(fastifyTemplateFiles);
+    });
+
+    it("should be able to create a project with a nest framework", async () => {
+      const sut = run([
+        projectName,
+        "--package-manager",
+        "pnpm",
+        "--framework",
+        "nest",
+      ]);
+
+      expect(sut).toContain(SUCCESS_MESSAGE);
+
+      let [
+        nestTemplateFiles,
+        generatedProjectFiles, // eslint-disable-line prefer-const
+      ] = await Promise.all([
+        readdir(resolve(TEMPLATES_PATH, "nest")),
+        readdir(resolve(GENERATED_APP_TARGET_ROOT_PATH, projectName)),
+      ]);
+
+      nestTemplateFiles = ignoreUnusedPaths(nestTemplateFiles);
+
+      expect(generatedProjectFiles).toEqual(nestTemplateFiles);
     });
   });
 });
