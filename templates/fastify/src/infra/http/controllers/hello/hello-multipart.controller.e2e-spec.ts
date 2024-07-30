@@ -1,4 +1,4 @@
-import { app } from "@/app";
+import { app } from "@/infra/http/app";
 import { faker } from "@faker-js/faker";
 import { lookup } from "mime-types";
 import { basename, extname } from "path";

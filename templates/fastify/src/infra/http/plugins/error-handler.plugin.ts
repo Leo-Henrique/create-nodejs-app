@@ -1,4 +1,4 @@
-import { HTTPErrorHandler } from "@/errors/http-error-handler";
+import { HTTPErrorHandler } from "@/infra/http/errors/http-error-handler";
 import { FastifyError, FastifyReply, FastifyRequest } from "fastify";
 
 export async function errorHandlerPlugin(

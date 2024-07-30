@@ -1,4 +1,4 @@
-import { env } from "@/env";
+import { env } from "@/infra/env";
 import { FastifyError, FastifyReply } from "fastify";
 import { MulterError } from "fastify-multer";
 import { SetOptional } from "type-fest";

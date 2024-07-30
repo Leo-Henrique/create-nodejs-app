@@ -1,4 +1,4 @@
-import { requireUpload } from "@/plugins/require-upload.plugin";
+import { requireUpload } from "@/infra/http/plugins/require-upload.plugin";
 import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { z } from "zod";

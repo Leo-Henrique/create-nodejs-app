@@ -1,5 +1,5 @@
-import { app } from "./app";
 import { env } from "./env";
+import { app } from "./http/app";
 
 (async () => {
   await app.ready();

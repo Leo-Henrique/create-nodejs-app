@@ -2,8 +2,11 @@ import {
   FastifyZodInstance,
   FastifyZodReply,
   FastifyZodRequest,
-} from "@/@types/fastify-zod-type-provider";
-import { RequestFormatError, UploadError } from "@/errors/exceptions";
+} from "@/infra/http/@types/fastify-zod-type-provider";
+import {
+  RequestFormatError,
+  UploadError,
+} from "@/infra/http/errors/exceptions";
 import { randomUUID } from "crypto";
 import { HookHandlerDoneFunction } from "fastify";
 import multer, { MulterError } from "fastify-multer";

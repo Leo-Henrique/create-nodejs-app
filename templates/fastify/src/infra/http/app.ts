@@ -10,7 +10,7 @@ import {
   serializerCompiler,
   validatorCompiler,
 } from "fastify-type-provider-zod";
-import { env } from "./env";
+import { env } from "../env";
 import { errorHandlerPlugin } from "./plugins/error-handler.plugin";
 import { handleSwaggerMultipart } from "./plugins/handle-swagger-multipart.plugin";
 import { routes } from "./routes";

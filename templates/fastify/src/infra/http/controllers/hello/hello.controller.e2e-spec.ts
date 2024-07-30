@@ -1,4 +1,4 @@
-import { app } from "@/app";
+import { app } from "@/infra/http/app";
 import request from "supertest";
 import { describe, expect, it } from "vitest";
 
