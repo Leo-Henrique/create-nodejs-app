@@ -7,9 +7,8 @@ export const frameworks = [
     value: "fastify",
   },
   {
-    title: "Nest",
+    title: "Nest + SWC",
     value: "nest",
-    disabled: true,
   },
   {
     title: "tRPC",
