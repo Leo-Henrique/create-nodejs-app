@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "prepare": "husky",
-    "start": "node ./dist/server.js",
+    "start": "node ./dist/infra/server.js",
     "start:dev": "nest start --watch",
     "typecheck": "tsc --noEmit",
     "lint": "eslint . --ext .ts --max-warnings 0 --cache",
