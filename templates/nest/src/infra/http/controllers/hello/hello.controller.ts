@@ -1,8 +1,8 @@
 import {
   BadRequestException,
   Controller,
+  Get,
   HttpCode,
-  Post,
   Query,
 } from "@nestjs/common";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
@@ -28,7 +28,7 @@ type HelloControllerResponse = z.infer<typeof helloControllerResponseSchema>;
 export class HelloController {
   @ApiTags("Hello")
   @ApiOperation({ summary: "Hello world!" })
-  @Post("/hello")
+  @Get("/hello")
   @HttpCode(200)
   @ZodSchemaPipe({
     queryParams: helloControllerQuerySchema,
