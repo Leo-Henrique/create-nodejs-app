@@ -23,28 +23,42 @@ export async function helloMultipartController(app: FastifyInstance) {
       multipartAnotherFieldsSchema: helloMultipartControllerBodySchema,
       response: {
         200: z.object({
-          message: z.string(),
-          description: z.string(),
-          file: z.custom(),
+          message: z.literal("Hello world!"),
+          description: z.string().min(2),
+          file: z.object({
+            fieldname: z.string(),
+            originalname: z.string(),
+            encoding: z.string(),
+            mimetype: z.string(),
+            size: z.number().optional(),
+          }),
         }),
       },
     },
     preHandler: requireUpload({
       fieldName: "attachment",
-      allowedExtensions: ["png", "jpg", "jpeg", "webp"],
-      limits: { fileSize: 1000000 * 15, files: 1 },
       storage: "memory",
+      allowedExtensions: ["jpeg", "png", "webp"],
+      limits: {
+        fileSize: 10 * 1000 * 1000, // 10MB
+        files: 1,
+      },
     }),
     handler: async (req, res) => {
-      // eslint-disable-next-line
-      const { buffer, ...fileInfo } = req.file;
+      const { fieldname, originalname, encoding, mimetype, size } = req.file;
       const { description } =
         req.body as unknown as HelloMultipartControllerBody;
 
       res.status(200).send({
         message: "Hello world!",
         description,
-        file: fileInfo,
+        file: {
+          fieldname,
+          originalname,
+          encoding,
+          mimetype,
+          size,
+        },
       });
     },
   });

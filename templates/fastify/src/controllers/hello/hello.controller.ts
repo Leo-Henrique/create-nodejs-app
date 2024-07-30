@@ -6,7 +6,7 @@ import { z } from "zod";
 const helloControllerQuerySchema = z.object({
   show: z
     .enum(["true", "false"])
-    .transform(val => JSON.parse(val))
+    .transform<boolean>(val => JSON.parse(val))
     .default("true"),
 });
 
@@ -19,7 +19,9 @@ export async function helloController(app: FastifyInstance) {
       summary: "Hello world!",
       querystring: helloControllerQuerySchema,
       response: {
-        200: z.object({ message: z.string() }),
+        200: z.object({
+          message: z.literal("Hello world!"),
+        }),
       },
     },
     handler: async (req, res) => {
@@ -27,7 +29,7 @@ export async function helloController(app: FastifyInstance) {
 
       if (!show)
         throw new BadRequestError(
-          'You don\'t want to display the "hello world"!',
+          `You don't want to display the "hello world"!`,
         );
 
       res.status(200).send({ message: "Hello world!" });
