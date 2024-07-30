@@ -12,7 +12,9 @@
     "format": "prettier . --write --cache",
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
-    "test:coverage": "vitest run --coverage.enabled=true --coverage.all=false",
+    "test:e2e": "vitest run --config ./vitest.config.e2e.mts",
+    "test:e2e:watch": "vitest --config ./vitest.config.e2e.mts",
+    "test:coverage": "vitest run --coverage.enabled=true",
     "build": "nest build"
   },
   "dependencies": {
@@ -34,10 +36,12 @@
     "@faker-js/faker": "8.4.1",
     "@nestjs/cli": "10.4.2",
     "@nestjs/schematics": "10.1.2",
+    "@nestjs/testing": "10.3.10",
     "@swc/cli": "0.4.0",
     "@swc/core": "1.7.0",
     "@types/mime-types": "2.1.4",
     "@types/node": "20.12.12",
+    "@types/supertest": "6.0.2",
     "@typescript-eslint/eslint-plugin": "7.10.0",
     "@typescript-eslint/parser": "7.10.0",
     "eslint": "8.57.0",
@@ -46,9 +50,10 @@
     "husky": "9.0.11",
     "lint-staged": "15.2.5",
     "prettier": "3.2.5",
+    "supertest": "7.0.0",
     "type-fest": "4.23.0",
     "typescript": "5.4.5",
-    "vite-tsconfig-paths": "4.3.2",
+    "unplugin-swc": "1.5.1",
     "vitest": "1.6.0"
   }
 }
