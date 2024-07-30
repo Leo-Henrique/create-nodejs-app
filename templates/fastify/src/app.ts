@@ -1,3 +1,4 @@
+import packageJson from "@/../package.json";
 import fastifyCookie from "@fastify/cookie";
 import fastifyCors from "@fastify/cors";
 import fastifySwagger from "@fastify/swagger";
@@ -23,8 +24,7 @@ app.register(fastifySwagger, {
   openapi: {
     info: {
       title: env.API_NAME ?? "",
-      description: process.env.npm_package_description ?? "",
-      version: process.env.npm_package_version ?? "",
+      version: packageJson.version,
     },
     servers: [],
   },

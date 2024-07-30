@@ -1,12 +1,12 @@
-import "dotenv/config";
+import packageJson from "@/../package.json";
+import { config } from "dotenv";
 import { z } from "zod";
+
+config({ override: true });
 
 const schema = z.object({
   NODE_ENV: z.enum(["test", "development", "production"]),
-  APP_NAME: z
-    .string()
-    .nullable()
-    .default(process.env.npm_package_name ?? null),
+  APP_NAME: z.string().default(packageJson.name),
 });
 
 const parsedEnv = schema.safeParse(process.env);
