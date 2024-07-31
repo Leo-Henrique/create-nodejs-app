@@ -46,7 +46,7 @@ Options:
 
 ## Features
 
-- **Fast**: All templates use [tsx](https://tsx.is/) to run Node.js with TypeScript and [unbuild](https://github.com/unjs/unbuild) to build the application. Both tools use [esbuild](https://esbuild.github.io/), an extremely fast packager also used by tools like [Vite](https://vitejs.dev/).
+- **Fast**: All templates use either [esbuild](https://esbuild.github.io/) or [SWC](https://swc.rs/) to compile and build TypeScript. Both are extremely fast and are used by tools like [Vite](https://vitejs.dev/) (esbuild) and [Next.js](https://nextjs.org/) (SWC).
 
 - **Lint and code format**: All templates use [eslint](https://eslint.org/) to identify problems in the code and [prettier](https://prettier.io/) to ensure consistent code formatting. Both are integrated with [husky](https://typicode.github.io/husky/) and [lint-staged](https://github.com/lint-staged/lint-staged) to automatically run them before every commit you make with git.
 
