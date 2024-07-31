@@ -13,10 +13,6 @@
   "bin": {
     "create-nodejs-app": "./dist/index.js"
   },
-  "files": [
-    "./dist",
-    "./templates"
-  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/Leo-Henrique/create-nodejs-app"
