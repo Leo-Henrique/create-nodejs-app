@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "prepare": "husky",
-    "start": "node ./dist/server.js",
-    "start:dev": "tsx watch ./src/server.ts",
+    "start": "node ./dist/infra/server.js",
+    "start:dev": "tsx watch ./src/infra/server.ts",
     "typecheck": "tsc --noEmit",
     "lint": "eslint . --ext .ts --max-warnings 0 --cache",
     "lint:fix": "pnpm lint --fix",

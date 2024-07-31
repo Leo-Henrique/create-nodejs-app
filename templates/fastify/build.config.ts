@@ -33,7 +33,7 @@ const pathAliases = Object.keys(compilerOptions.paths).reduce(
 
 export default defineBuildConfig({
   outDir: "./dist",
-  entries: ["./src/server.ts"],
+  entries: ["./src/infra/server.ts"],
   clean: true,
   alias: pathAliases,
   externals: Object.keys(packageJson.dependencies),
