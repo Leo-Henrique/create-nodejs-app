@@ -2,7 +2,8 @@
 import "./config";
 
 import { Command } from "commander";
-import { basename, resolve } from "path";
+import { rename } from "fs/promises";
+import { basename, dirname, resolve } from "path";
 import { cyan } from "picocolors";
 import prompts, { Choice } from "prompts";
 import packageJson from "../package.json";
@@ -158,6 +159,8 @@ program
       projectDirectory.value,
       ".husky/pre-commit",
     );
+    const gitignorePath = resolve(projectDirectory.value, "gitignore");
+    const npmrcPath = resolve(projectDirectory.value, "npmrc");
 
     await Promise.all([
       replaceContentInFileCompose(packageJsonPath, [["app-name", projectName]]),
@@ -165,6 +168,8 @@ program
       replaceContentInFileCompose(huskyPreCommitPath, [
         ["pnpm", packageManager.value],
       ]),
+      rename(gitignorePath, resolve(dirname(gitignorePath), ".gitignore")),
+      rename(npmrcPath, resolve(dirname(npmrcPath), ".npmrc")),
     ]);
 
     successLog(
