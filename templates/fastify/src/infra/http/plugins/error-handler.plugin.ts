@@ -1,27 +1,45 @@
-import { HTTPErrorHandler } from "@/infra/http/errors/http-error-handler";
+import { ValidationError } from "@/core/errors/errors";
+import { env } from "@/infra/env";
+import { ErrorPresenter } from "@/infra/presenters/error.presenter";
 import { FastifyError, FastifyReply, FastifyRequest } from "fastify";
+import { ZodError } from "zod";
+import { HttpError } from "../errors/http-error";
 
 export async function errorHandlerPlugin(
   error: FastifyError,
   _req: FastifyRequest,
-  response: FastifyReply,
+  res: FastifyReply,
 ) {
   console.error(error);
 
-  const methodNames = Object.getOwnPropertyNames(HTTPErrorHandler.prototype);
-  const unknownErrorName = "unknownErrorHandler";
-  const handlerNames = methodNames.filter(name => {
-    return name.endsWith("ErrorHandler") && !name.includes(unknownErrorName);
-  });
+  let httpResponse: ReturnType<typeof ErrorPresenter.toHttp> =
+    ErrorPresenter.toHttp(500, {
+      error: "InternalServerError",
+      message: "Desculpe, um erro inesperado ocorreu.",
+      debug: error.message,
+    });
 
-  handlerNames.push(unknownErrorName);
+  if (error.statusCode)
+    httpResponse = ErrorPresenter.toHttp(error.statusCode, {
+      error: error.name,
+      message: error.message,
+      debug: null,
+    });
 
-  const handlerInstance = new HTTPErrorHandler(error, response);
+  if (error instanceof ValidationError)
+    httpResponse = ErrorPresenter.toHttp(400, error);
 
-  for (const handlerName of handlerNames) {
-    const hasError =
-      await handlerInstance[handlerName as keyof HTTPErrorHandler]();
+  if (error instanceof ZodError)
+    httpResponse = ErrorPresenter.toHttp(
+      400,
+      new ValidationError(error.flatten().fieldErrors),
+    );
 
-    if (hasError) break;
-  }
+  if (error instanceof HttpError)
+    httpResponse = ErrorPresenter.toHttp(error.statusCode, error);
+
+  if (env.NODE_ENV === "production" && "debug" in httpResponse)
+    delete httpResponse.debug;
+
+  res.status(httpResponse.statusCode).send(httpResponse);
 }

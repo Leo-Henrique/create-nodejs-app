@@ -1,7 +1,7 @@
-import { BadRequestError } from "@/infra/http/errors/exceptions";
 import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { z } from "zod";
+import { BadRequestError } from "../../errors/bad-request.error";
 
 const helloControllerQuerySchema = z.object({
   show: z

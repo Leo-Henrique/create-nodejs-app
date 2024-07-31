@@ -3,17 +3,13 @@ import {
   FastifyZodReply,
   FastifyZodRequest,
 } from "@/infra/http/@types/fastify-zod-type-provider";
-import {
-  RequestFormatError,
-  UploadError,
-} from "@/infra/http/errors/exceptions";
 import { randomUUID } from "crypto";
-import { HookHandlerDoneFunction } from "fastify";
 import multer, { MulterError } from "fastify-multer";
 import { Options } from "fastify-multer/lib/interfaces";
 import { extension } from "mime-types";
 import path, { extname } from "path";
 import prettyBytes from "pretty-bytes";
+import { UploadValidationError } from "../errors/upload-validation.error";
 
 interface MemoryStorage {
   storage?: "memory";
@@ -85,15 +81,12 @@ export function requireUpload(
       if (allowedExtensions.includes(fileExtension)) {
         cb(null, true);
       } else {
-        const validExtensions = allowedExtensions
-          .map(ext => `"${ext}"`)
-          .join(", ");
-
         cb(
-          new UploadError(
-            400,
-            `Formato de arquivo inválido. Use apenas extensões: ${validExtensions}.`,
-          ),
+          new UploadValidationError(400, {
+            message: "Invalid file format.",
+            fieldName,
+            allowedExtensions,
+          }),
         );
       }
     },
@@ -101,74 +94,75 @@ export function requireUpload(
   const isMultipleUpload = limits.files > 1;
 
   return [
-    async (req: FastifyZodRequest) => {
-      if (!req.headers["content-type"]?.includes("multipart/form-data")) {
-        throw new RequestFormatError(
-          "A solicitação deve ser do tipo multipart/form-data.",
-        );
-      }
-    },
-    function (
+    async function (
       this: FastifyZodInstance,
       req: FastifyZodRequest,
       res: FastifyZodReply,
-      done: HookHandlerDoneFunction,
     ) {
       let middleware = upload.single(fieldName);
 
       if (isMultipleUpload) middleware = upload.array(fieldName);
 
-      middleware.bind(this)(req, res, error => {
-        const sendError = (statusCode: number, message: string) => {
-          done(new UploadError(statusCode, message));
-        };
+      await new Promise<void>((resolve, reject) => {
+        middleware.bind(this)(req, res, error => {
+          if (error && error instanceof MulterError) {
+            switch (error.code) {
+              case "LIMIT_FILE_COUNT":
+                reject(
+                  new UploadValidationError(413, {
+                    multerError: error.code,
+                    message: error.message,
+                    maxFileCount: limits.files!,
+                  }),
+                );
+                break;
 
-        if (error && error instanceof MulterError) {
-          switch (error.code) {
-            case "LIMIT_FILE_SIZE":
-              return sendError(
-                413,
-                `O tamanho máximo de cada arquivo é ${prettyBytes(
-                  limits.fileSize,
-                )}.`,
-              );
+              case "LIMIT_FILE_SIZE":
+                reject(
+                  new UploadValidationError(413, {
+                    multerError: error.code,
+                    message: error.message,
+                    fieldName: error.field,
+                    maxFileSize: prettyBytes(limits.fileSize!),
+                  }),
+                );
+                break;
 
-            case "LIMIT_FILE_COUNT":
-              return sendError(
-                413,
-                `A contagem máxima de arquivos é ${limits.files}.`,
-              );
-
-            case "LIMIT_UNEXPECTED_FILE":
-              return sendError(
-                400,
-                `O campo de arquivo '${error.field}' não é permitido.`,
-              );
-
-            default:
-              return done(error);
+              default:
+                reject(
+                  new UploadValidationError(
+                    error.code === "LIMIT_UNEXPECTED_FILE" ? 400 : 413,
+                    {
+                      multerError: error.code,
+                      message: error.message,
+                      fieldName: error.field,
+                    },
+                  ),
+                );
+                break;
+            }
           }
-        }
 
-        if (error) return done(error);
+          if (error) return reject(error);
 
-        done();
+          resolve();
+        });
       });
     },
     async (req: FastifyZodRequest) => {
       if (isRequiredUpload) {
         if (!isMultipleUpload && !req.file) {
-          throw new UploadError(
-            400,
-            `O campo '${fieldName}' é obrigatório com um arquivo.`,
-          );
+          throw new UploadValidationError(400, {
+            multerError: null,
+            message: `Field "${fieldName}" is required with a file.`,
+          });
         }
 
         if (isMultipleUpload && (!req.files || !req.files.length)) {
-          throw new UploadError(
-            400,
-            `O campo '${fieldName}' é obrigatório com no mínimo um arquivo.`,
-          );
+          throw new UploadValidationError(400, {
+            multerError: null,
+            message: `Field "${fieldName}" is required with at least 1 file.`,
+          });
         }
       }
 
