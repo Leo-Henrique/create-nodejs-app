@@ -298,11 +298,14 @@ export class ExecuteUploadInterceptor implements NestInterceptor {
 
             default:
               reject(
-                new UploadValidationError(413, {
-                  multerError: error.code,
-                  message: error.message,
-                  fieldName: error.field,
-                }),
+                new UploadValidationError(
+                  error.code === "LIMIT_UNEXPECTED_FILE" ? 400 : 413,
+                  {
+                    multerError: error.code,
+                    message: error.message,
+                    fieldName: error.field,
+                  },
+                ),
               );
               break;
           }
