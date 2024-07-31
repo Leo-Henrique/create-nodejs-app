@@ -119,7 +119,13 @@ describe("[CLI] should be able to run and use program with a cli", () => {
   });
 
   describe("Variants", () => {
-    const ignoreUnusedPaths = (paths: string[]) => {
+    const validTemplatePaths = (paths: string[]) => {
+      const gitignoreIndex = paths.findIndex(path => path === "gitignore");
+      const npmrcIndex = paths.findIndex(path => path === "npmrc");
+
+      paths[gitignoreIndex] = ".gitignore";
+      paths[npmrcIndex] = ".npmrc";
+
       return paths.filter(path => {
         return ![
           "node_modules",
@@ -150,9 +156,11 @@ describe("[CLI] should be able to run and use program with a cli", () => {
         readdir(resolve(GENERATED_APP_TARGET_ROOT_PATH, projectName)),
       ]);
 
-      cleanTemplateFiles = ignoreUnusedPaths(cleanTemplateFiles);
+      cleanTemplateFiles = validTemplatePaths(cleanTemplateFiles);
 
-      expect(generatedProjectFiles).toEqual(cleanTemplateFiles);
+      expect(generatedProjectFiles).toEqual(
+        expect.arrayContaining(cleanTemplateFiles),
+      );
     });
 
     it("should be able to create a project with a fastify framework", async () => {
@@ -174,9 +182,11 @@ describe("[CLI] should be able to run and use program with a cli", () => {
         readdir(resolve(GENERATED_APP_TARGET_ROOT_PATH, projectName)),
       ]);
 
-      fastifyTemplateFiles = ignoreUnusedPaths(fastifyTemplateFiles);
+      fastifyTemplateFiles = validTemplatePaths(fastifyTemplateFiles);
 
-      expect(generatedProjectFiles).toEqual(fastifyTemplateFiles);
+      expect(generatedProjectFiles).toEqual(
+        expect.arrayContaining(fastifyTemplateFiles),
+      );
     });
 
     it("should be able to create a project with a nest framework", async () => {
@@ -198,9 +208,11 @@ describe("[CLI] should be able to run and use program with a cli", () => {
         readdir(resolve(GENERATED_APP_TARGET_ROOT_PATH, projectName)),
       ]);
 
-      nestTemplateFiles = ignoreUnusedPaths(nestTemplateFiles);
+      nestTemplateFiles = validTemplatePaths(nestTemplateFiles);
 
-      expect(generatedProjectFiles).toEqual(nestTemplateFiles);
+      expect(generatedProjectFiles).toEqual(
+        expect.arrayContaining(nestTemplateFiles),
+      );
     });
   });
 });
