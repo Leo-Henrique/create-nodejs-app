@@ -1,4 +1,5 @@
 import { DomainError } from "@/core/errors/domain-error";
+import { env } from "../env";
 
 type CustomError = Pick<DomainError, "error" | "message" | "debug">;
 
@@ -8,7 +9,7 @@ export class ErrorPresenter {
       error: error.error,
       message: error.message,
       statusCode,
-      debug: error.debug,
+      debug: env.NODE_ENV !== "production" ? error.debug : null,
     };
   }
 }

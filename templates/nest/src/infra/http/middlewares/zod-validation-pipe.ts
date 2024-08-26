@@ -1,4 +1,4 @@
-import { ValidationError } from "@/core/errors/errors";
+import { ValidationError } from "@/core/errors/validation.error";
 import { ArgumentMetadata, PipeTransform } from "@nestjs/common";
 import { ZodError, ZodType } from "zod";
 
