@@ -1,10 +1,10 @@
 import { ValidationError } from "@/core/errors/validation.error";
 import { ArgumentMetadata, PipeTransform } from "@nestjs/common";
-import { ZodError, ZodType } from "zod";
+import { ZodError, ZodObject, ZodRawShape, ZodType } from "zod";
 
 export interface ZodValidationPipeSchemas {
-  routeParams?: ZodType;
-  queryParams?: ZodType;
+  routeParams?: ZodObject<ZodRawShape>;
+  queryParams?: ZodObject<ZodRawShape>;
   body?: ZodType;
 }
 

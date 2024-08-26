@@ -1,5 +1,4 @@
-import { createZodDto } from "@anatine/zod-nestjs";
-import { extendApi, generateSchema } from "@anatine/zod-openapi";
+import { generateSchema } from "@anatine/zod-openapi";
 import { UsePipes, applyDecorators } from "@nestjs/common";
 import { ZodType } from "zod";
 import {
@@ -13,10 +12,6 @@ import { RequireAtLeastOne } from "type-fest";
 
 export function zodSchemaToSwaggerSchema(schema: ZodType) {
   return generateSchema(schema, false, "3.0") as SchemaObject;
-}
-
-export function zodSchemaToNestDto(schema: ZodType) {
-  return class Dto extends createZodDto(extendApi(schema)) {};
 }
 
 interface ZodSchemaPipeParams extends ZodValidationPipeSchemas {
@@ -38,17 +33,35 @@ export function ZodSchemaPipe({
   const apiDecorators: NestSwaggerDecorator[] = [];
 
   if (routeParams) {
-    apiDecorators.push(
-      ApiParam({ type: zodSchemaToNestDto(routeParams), name: "" }),
-    );
+    const routeParamsSchema = zodSchemaToSwaggerSchema(routeParams);
+
+    for (const paramName in routeParams.shape) {
+      apiDecorators.push(
+        ApiParam({
+          name: paramName,
+          schema: zodSchemaToSwaggerSchema(routeParams.shape[paramName]),
+          required: routeParamsSchema.required?.includes(paramName) ?? false,
+        }),
+      );
+    }
   }
 
   if (queryParams) {
-    apiDecorators.push(ApiQuery({ type: zodSchemaToNestDto(queryParams) }));
+    const queryParamsSchema = zodSchemaToSwaggerSchema(queryParams);
+
+    for (const paramName in queryParams.shape) {
+      apiDecorators.push(
+        ApiQuery({
+          name: paramName,
+          schema: zodSchemaToSwaggerSchema(queryParams.shape[paramName]),
+          required: queryParamsSchema.required?.includes(paramName) ?? false,
+        }),
+      );
+    }
   }
 
   if (body && !isMultipart) {
-    apiDecorators.push(ApiBody({ type: zodSchemaToNestDto(body) }));
+    apiDecorators.push(ApiBody({ schema: zodSchemaToSwaggerSchema(body) }));
   }
 
   if (response) {

@@ -19,7 +19,6 @@
     "build": "nest build"
   },
   "dependencies": {
-    "@anatine/zod-nestjs": "2.0.9",
     "@anatine/zod-openapi": "2.2.6",
     "@fastify/static": "7.0.4",
     "@nestjs/common": "10.3.10",
