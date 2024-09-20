@@ -15,9 +15,11 @@ import multer, {
   memoryStorage,
 } from "fastify-multer";
 import { File, FileFilter, StorageEngine } from "fastify-multer/lib/interfaces";
+import { unlink } from "fs/promises";
 import { extension } from "mime-types";
 import { extname } from "path";
 import prettyBytes from "pretty-bytes";
+import { finalize } from "rxjs";
 import { ZodObject, ZodRawShape, z } from "zod";
 import { UploadValidationError } from "../errors/upload-validation.error";
 import { zodSchemaToSwaggerSchema } from "./zod-schema-pipe";
@@ -108,6 +110,12 @@ type UploadInterceptorOptions = Storage & {
    * Infinity
    */
   maxNonFileFieldSize?: number;
+  /**
+   * Removes all uploaded files after handler execution.
+   *
+   * @default true
+   */
+  removeFilesAfterHandlerExecution?: boolean;
 };
 
 /**
@@ -123,6 +131,7 @@ export function UploadInterceptor(options: UploadInterceptorOptions) {
     maxFileSize,
     nonFileFieldsZodSchema,
     maxNonFileFieldSize,
+    removeFilesAfterHandlerExecution,
     ...restOptions
   } = {
     destination: "./tmp",
@@ -132,6 +141,7 @@ export function UploadInterceptor(options: UploadInterceptorOptions) {
     maxFileSize: 50,
     nonFileFieldsZodSchema: z.object({}),
     maxNonFileFieldSize: 1,
+    removeFilesAfterHandlerExecution: true,
     ...options,
   };
   const nonFileFieldsSwaggerSchema = zodSchemaToSwaggerSchema(
@@ -211,24 +221,28 @@ export function UploadInterceptor(options: UploadInterceptorOptions) {
   };
 
   const megabytesToBytes = (mb: number) => mb * 1000 * 1000;
+  const interceptors: NestInterceptor[] = [
+    new ExecuteUploadInterceptor({
+      multerInstance: multer({
+        storage: getMulterStorage(),
+        fileFilter: setMulterFileFilter,
+        limits: {
+          files: maxFileCount,
+          fileSize: megabytesToBytes(maxFileSize),
+          fields: Infinity,
+          fieldSize: megabytesToBytes(maxNonFileFieldSize),
+        },
+      }),
+      fieldName,
+      required,
+    }),
+  ];
+
+  if (removeFilesAfterHandlerExecution)
+    interceptors.push(new RemoveUploadsInterceptor());
 
   return applyDecorators(
-    UseInterceptors(
-      new ExecuteUploadInterceptor({
-        multerInstance: multer({
-          storage: getMulterStorage(),
-          fileFilter: setMulterFileFilter,
-          limits: {
-            files: maxFileCount,
-            fileSize: megabytesToBytes(maxFileSize),
-            fields: Object.keys(nonFileFieldsZodSchema.shape).length,
-            fieldSize: megabytesToBytes(maxNonFileFieldSize),
-          },
-        }),
-        fieldName,
-        required,
-      }),
-    ),
+    UseInterceptors(...interceptors),
     ApiConsumes("multipart/form-data"),
     ApiBody({
       schema: {
@@ -364,5 +378,28 @@ export class ExecuteUploadInterceptor implements NestInterceptor {
     request.body = parseNonFileFields();
 
     return next.handle();
+  }
+}
+
+export class RemoveUploadsInterceptor implements NestInterceptor {
+  intercept(context: ExecutionContext, next: CallHandler) {
+    const ctx = context.switchToHttp();
+    const request = ctx.getRequest<FastifyRequestWithFile>();
+
+    return next.handle().pipe(
+      finalize(async () => {
+        const { file, files } = request;
+
+        if (file && file.path) await unlink(file.path);
+
+        if (files) {
+          await Promise.all(
+            files.map(async file => {
+              if (file.path) return unlink(file.path);
+            }),
+          );
+        }
+      }),
+    );
   }
 }
