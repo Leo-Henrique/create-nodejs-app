@@ -1,14 +1,13 @@
-import { DomainError } from "@/core/errors/domain-error";
-
-type CustomError = Pick<DomainError, "error" | "message" | "debug">;
+import { DomainErrorCoreProperties } from "@/core/domain-error";
+import { env } from "../env";
 
 export class ErrorPresenter {
-  public static toHttp(statusCode: number, error: DomainError | CustomError) {
+  public static toHttp(statusCode: number, error: DomainErrorCoreProperties) {
     return {
       error: error.error,
       message: error.message,
       statusCode,
-      debug: error.debug,
+      debug: env.NODE_ENV !== "production" ? error.debug : null,
     };
   }
 }

@@ -1,9 +1,9 @@
-import { HttpError } from "./http-error";
+import { HttpError } from "@/core/domain-error";
 
 export class BadRequestError extends HttpError {
-  public error = "BadRequestError";
-  public statusCode = 400;
-  public debug = null;
+  readonly error = "BAD_REQUEST_ERROR";
+  readonly statusCode = 400;
+  readonly debug = null;
 
   constructor(public message: string) {
     super(message);

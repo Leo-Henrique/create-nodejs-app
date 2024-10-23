@@ -1,15 +1,21 @@
-import { HttpError } from "./http-error";
+import { HttpError } from "@/core/domain-error";
+
+const message = "Os dados enviados são inválidos.";
 
 export class UploadValidationError extends HttpError {
-  public error = "UploadValidationError";
-  public debug = { multerError: null };
+  readonly error = "UPLOAD_VALIDATION_ERROR";
+  readonly message = message;
+  public debug: object;
 
   constructor(
     public statusCode = 400,
-    debug: object = {},
+    debug = {},
   ) {
-    super("Os dados enviados são inválidos.");
+    super(message);
 
-    this.debug = { ...this.debug, ...debug };
+    this.debug = {
+      multerError: null,
+      ...debug,
+    };
   }
 }
