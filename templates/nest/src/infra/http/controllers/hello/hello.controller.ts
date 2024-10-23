@@ -1,12 +1,7 @@
-import {
-  BadRequestException,
-  Controller,
-  Get,
-  HttpCode,
-  Query,
-} from "@nestjs/common";
+import { Controller, Get, HttpCode, Query } from "@nestjs/common";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { z } from "zod";
+import { BadRequestError } from "../../errors/bad-request.error";
 import { ZodSchemaPipe } from "../../middlewares/zod-schema-pipe";
 
 export const helloControllerQuerySchema = z.object({
@@ -42,9 +37,7 @@ export class HelloController {
     const { show } = query;
 
     if (!show)
-      throw new BadRequestException(
-        `You don't want to display the "hello world"!`,
-      );
+      throw new BadRequestError(`You don't want to display the "hello world"!`);
 
     return { message: "Hello world!" };
   }

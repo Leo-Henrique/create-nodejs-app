@@ -1,10 +1,8 @@
-import { DomainError } from "@/core/errors/domain-error";
+import { DomainErrorCoreProperties } from "@/core/domain-error";
 import { env } from "../env";
 
-type CustomError = Pick<DomainError, "error" | "message" | "debug">;
-
 export class ErrorPresenter {
-  public static toHttp(statusCode: number, error: DomainError | CustomError) {
+  public static toHttp(statusCode: number, error: DomainErrorCoreProperties) {
     return {
       error: error.error,
       message: error.message,

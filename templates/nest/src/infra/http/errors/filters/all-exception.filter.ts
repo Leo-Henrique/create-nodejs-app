@@ -13,19 +13,19 @@ export class AllExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<FastifyReply>();
 
-    const debug =
-      exception && typeof exception === "object" && "message" in exception
-        ? exception.message
-        : null;
+    let httpError: HttpException;
 
-    let httpException: HttpException = new InternalServerError(debug);
+    if (exception instanceof HttpException) httpError = exception;
+    else {
+      const debugFromUnknownError =
+        exception && typeof exception === "object" && "message" in exception
+          ? exception.message
+          : null;
 
-    if (exception instanceof HttpException) httpException = exception;
+      httpError = new InternalServerError(debugFromUnknownError);
+      console.error(httpError);
+    }
 
-    console.error(exception);
-
-    response
-      .status(httpException.getStatus())
-      .send(httpException.getResponse());
+    response.status(httpError.getStatus()).send(httpError.getResponse());
   }
 }

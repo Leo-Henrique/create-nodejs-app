@@ -43,5 +43,20 @@ describe("[Controller] GET /hello", () => {
       .query({ show: false } satisfies HelloControllerQuery);
 
     expect(response.statusCode).toEqual(400);
+    expect(response.body.error).toEqual("BAD_REQUEST_ERROR");
+  });
+
+  describe("Input data validations", () => {
+    it("with invalid show property", async () => {
+      const response = await request(app.getHttpServer())
+        .get("/hello")
+        .query({
+          // @ts-expect-error the value must be a boolean
+          show: 0,
+        } satisfies HelloControllerQuery);
+
+      expect(response.statusCode).toEqual(400);
+      expect(response.body.error).toEqual("VALIDATION_ERROR");
+    });
   });
 });

@@ -2,16 +2,22 @@ import { ErrorPresenter } from "@/infra/presenters/error.presenter";
 import { HttpException } from "@nestjs/common";
 
 export class UploadValidationError extends HttpException {
-  constructor(statusCode = 400, debug: object = {}) {
-    const presenter = ErrorPresenter.toHttp(statusCode, {
-      error: "UploadValidationError",
-      message: "Os dados enviados são inválidos.",
-      debug: {
-        multerError: null,
-        ...debug,
-      },
-    });
+  static readonly error = "UPLOAD_VALIDATION_ERROR";
 
-    super(presenter, statusCode);
+  constructor(
+    public statusCode = 400,
+    public debug = {},
+  ) {
+    super(
+      ErrorPresenter.toHttp(statusCode, {
+        ...UploadValidationError,
+        message: "Os dados enviados são inválidos.",
+        debug: {
+          multerError: null,
+          ...debug,
+        },
+      }),
+      statusCode,
+    );
   }
 }
