@@ -9,6 +9,7 @@
           { "type": "perf", "release": false },
           { "type": "feat", "release": "patch" },
           { "scope": "templates", "release": "patch" },
+          { "scope": "template-*", "release": "patch" },
           { "scope": "cli", "release": "patch" },
           { "scope": "script", "release": "patch" },
           { "scope": "package", "release": "patch" }
@@ -21,13 +22,15 @@
         "preset": "conventionalCommits",
         "presetConfig": {
           "types": [
+            { "scope": "templates", "section": "Templates" },
+            { "scope": "template-*", "section": "Templates" },
             { "type": "feat", "section": "Features" },
             { "type": "fix", "section": "Bug fixes" },
-            { "type": "chore", "scope": "templates", "section": "Misc" },
-            { "type": "perf", "scope": "templates", "section": "Misc" },
-            { "type": "refactor", "scope": "templates", "section": "Misc" },
-            { "type": "test", "scope": "templates", "section": "Misc" },
-            { "type": "docs", "scope": "templates", "section": "Misc" },
+            { "type": "chore", "section": "Misc" },
+            { "type": "perf", "section": "Misc" },
+            { "type": "refactor", "section": "Misc" },
+            { "type": "test", "section": "Misc" },
+            { "type": "docs", "section": "Misc" },
             { "type": "style", "hidden": true }
           ]
         }
