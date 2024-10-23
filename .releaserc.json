@@ -22,8 +22,6 @@
         "preset": "conventionalCommits",
         "presetConfig": {
           "types": [
-            { "scope": "templates", "section": "Templates" },
-            { "scope": "template-*", "section": "Templates" },
             { "type": "feat", "section": "Features" },
             { "type": "fix", "section": "Bug fixes" },
             { "type": "chore", "section": "Misc" },
@@ -31,7 +29,9 @@
             { "type": "refactor", "section": "Misc" },
             { "type": "test", "section": "Misc" },
             { "type": "docs", "section": "Misc" },
-            { "type": "style", "hidden": true }
+            { "type": "style", "hidden": true },
+            { "scope": "templates", "section": "Templates" },
+            { "scope": "template-*", "section": "Templates" }
           ]
         }
       }
