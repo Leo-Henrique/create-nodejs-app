@@ -1,14 +1,23 @@
 import { app } from "@/infra/http/app";
 import request from "supertest";
 import { describe, expect, it } from "vitest";
+import { HelloControllerQuery } from "./hello.controller";
 
-describe("[Controller] Hello", () => {
-  it("[GET] /hello", async () => {
+describe("[Controller] GET /hello", () => {
+  it("should be able to show hello world when setting true in the query parameter", async () => {
     const response = await request(app.server)
       .get("/hello")
-      .query({ show: true });
+      .query({ show: true } satisfies HelloControllerQuery);
 
     expect(response.statusCode).toEqual(200);
-    expect(response.body).toEqual({ message: "Hello world!" });
+    expect(response.body).toStrictEqual({ message: "Hello world!" });
+  });
+
+  it("should not be able to show hello world when setting false in the query parameter", async () => {
+    const response = await request(app.server)
+      .get("/hello")
+      .query({ show: false } satisfies HelloControllerQuery);
+
+    expect(response.statusCode).toEqual(400);
   });
 });

@@ -9,10 +9,6 @@ const helloMultipartControllerBodySchema = z.object({
   description: z.string().min(2),
 });
 
-type HelloMultipartControllerBody = z.infer<
-  typeof helloMultipartControllerBodySchema
->;
-
 const helloMultipartControllerResponseSchema = z.object({
   message: z.literal("Hello world!"),
   description: z.string().min(2),
@@ -24,6 +20,10 @@ const helloMultipartControllerResponseSchema = z.object({
     size: z.number().optional(),
   }),
 });
+
+export type HelloMultipartControllerBody = z.infer<
+  typeof helloMultipartControllerBodySchema
+>;
 
 type HelloMultipartControllerResponse = z.infer<
   typeof helloMultipartControllerResponseSchema

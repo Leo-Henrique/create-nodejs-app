@@ -16,11 +16,11 @@ export const helloControllerQuerySchema = z.object({
     .transform<boolean>(val => JSON.parse(val)),
 });
 
-type HelloControllerQuery = z.infer<typeof helloControllerQuerySchema>;
-
 const helloControllerResponseSchema = z.object({
   message: z.literal("Hello world!"),
 });
+
+export type HelloControllerQuery = z.infer<typeof helloControllerQuerySchema>;
 
 type HelloControllerResponse = z.infer<typeof helloControllerResponseSchema>;
 

@@ -10,6 +10,8 @@ const helloControllerQuerySchema = z.object({
     .default("true"),
 });
 
+export type HelloControllerQuery = z.infer<typeof helloControllerQuerySchema>;
+
 export async function helloController(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().route({
     method: "GET",

@@ -9,10 +9,11 @@ import { lookup } from "mime-types";
 import { basename, extname } from "path";
 import request from "supertest";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { HelloMultipartControllerBody } from "./hello-multipart.controller";
 
 const SAMPLE_UPLOAD_PATH = "./test/integration/sample-upload.jpg";
 
-describe("[Controller] Hello multipart", () => {
+describe("[Controller] POST /hello/multipart", () => {
   let app: NestFastifyApplication;
 
   beforeAll(async () => {
@@ -32,14 +33,14 @@ describe("[Controller] Hello multipart", () => {
     await app.close();
   });
 
-  it("[POST] /hello/multipart", async () => {
+  it("should be able to upload a image", async () => {
     const fieldName = "attachment";
     const description = faker.lorem.sentence();
 
     const response = await request(app.getHttpServer())
       .post("/hello/multipart")
       .attach(fieldName, SAMPLE_UPLOAD_PATH)
-      .field({ description });
+      .field({ description } satisfies HelloMultipartControllerBody);
 
     expect(response.statusCode).toEqual(200);
     expect(response.body).toEqual(

@@ -7,7 +7,7 @@ const helloMultipartControllerBodySchema = z.object({
   description: z.string().min(2),
 });
 
-type HelloMultipartControllerBody = z.infer<
+export type HelloMultipartControllerBody = z.infer<
   typeof helloMultipartControllerBodySchema
 >;
 
