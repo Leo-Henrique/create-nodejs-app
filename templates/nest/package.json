@@ -13,9 +13,9 @@
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
     "test:unit:coverage": "vitest run --coverage.enabled=true",
-    "test:e2e": "vitest run --config ./vitest.config.e2e.mts",
-    "test:e2e:watch": "vitest --config ./vitest.config.e2e.mts",
-    "test:e2e:coverage": "vitest run --config ./vitest.config.e2e.mts --coverage.enabled=true",
+    "test:integration": "vitest run --config ./vitest.config.integration.mts",
+    "test:integration:watch": "vitest --config ./vitest.config.integration.mts",
+    "test:integration:coverage": "vitest run --config ./vitest.config.integration.mts --coverage.enabled=true",
     "build": "nest build"
   },
   "dependencies": {

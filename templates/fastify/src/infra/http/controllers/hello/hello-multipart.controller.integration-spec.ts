@@ -5,7 +5,7 @@ import { basename, extname } from "path";
 import request from "supertest";
 import { describe, expect, it } from "vitest";
 
-const SAMPLE_UPLOAD_PATH = "./test/e2e/sample-upload.jpg";
+const SAMPLE_UPLOAD_PATH = "./test/integration/sample-upload.jpg";
 
 describe("[Controller] Hello multipart", () => {
   it("[POST] /hello/multipart", async () => {

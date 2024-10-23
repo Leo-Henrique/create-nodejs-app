@@ -3,6 +3,7 @@ import defaultConfig from "./vitest.config.mjs";
 
 export default mergeConfig(defaultConfig, {
   test: {
-    include: ["./**/*.e2e-spec.ts"],
+    include: ["./**/*.integration-spec.ts"],
+    setupFiles: ["./test/integration/setup.ts"],
   },
 });
