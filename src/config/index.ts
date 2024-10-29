@@ -2,6 +2,8 @@ import { getPackageJsonUpDir } from "@/utils/get-package-json-up-dir";
 import { existsSync, mkdirSync } from "fs";
 import { resolve } from "path";
 
+if (!process.env.NODE_ENV) process.env.NODE_ENV = "production";
+
 const PROJECT_ROOT_PATH = getPackageJsonUpDir();
 
 export const GENERATED_APP_TARGET_ROOT_PATH =

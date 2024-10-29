@@ -22,10 +22,9 @@
     "url": "https://github.com/Leo-Henrique/create-nodejs-app"
   },
   "scripts": {
-    "prepare": "husky",
-    "start": "NODE_ENV=production node ./dist/index.js",
-    "start:dev": "tsx ./src/index.ts",
-    "start:dev:watch": "tsx watch ./src/index.ts",
+    "start": "node ./dist/index.js",
+    "start:dev": "tsx --env-file=.env.development ./src/index.ts",
+    "start:dev:watch": "tsx --env-file=.env.development watch ./src/index.ts",
     "typecheck": "tsc --noEmit",
     "lint": "eslint . --ext .ts --max-warnings 0 --cache",
     "lint:fix": "pnpm lint --fix",
@@ -35,7 +34,7 @@
     "test:e2e": "vitest run --config ./vitest.config.e2e.mts",
     "test:e2e:watch": "vitest --config ./vitest.config.e2e.mts",
     "test:coverage": "vitest run --coverage.enabled=true",
-    "template": "tsx ./scripts/template-cli.ts",
+    "template": "tsx --env-file=.env.development ./scripts/template-cli.ts",
     "prebuild": "rimraf ./dist",
     "build": "unbuild",
     "prepublishOnly": "pnpm build"
