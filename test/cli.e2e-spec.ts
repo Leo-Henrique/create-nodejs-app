@@ -19,7 +19,9 @@ const FRAMEWORK_QUESTION = "What is your favorite framework?";
 const SUCCESS_MESSAGE = "Success in creating new app";
 
 function run(args: string[] = []) {
-  return execSync(`pnpm start ${args.join(" ")}`, { encoding: "utf-8" });
+  return execSync(`node ./dist/index.js ${args.join(" ")}`, {
+    encoding: "utf-8",
+  });
 }
 
 describe("[CLI] should be able to run and use program with a cli", () => {
