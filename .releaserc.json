@@ -12,7 +12,8 @@
           { "scope": "template-*", "release": "patch" },
           { "scope": "cli", "release": "patch" },
           { "scope": "script", "release": "patch" },
-          { "scope": "package", "release": "patch" }
+          { "scope": "package", "release": "patch" },
+          { "scope": "deps", "release": "patch" }
         ]
       }
     ],
