@@ -48,8 +48,6 @@ jobs:
   integration-tests:
     runs-on: ubuntu-latest
 
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-
     strategy:
       matrix:
         project: [./templates/fastify, ./templates/nest]
@@ -79,8 +77,6 @@ jobs:
 
   e2e-tests:
     runs-on: ubuntu-latest
-
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     strategy:
       matrix:
