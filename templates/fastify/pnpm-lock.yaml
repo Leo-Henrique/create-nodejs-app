@@ -52,8 +52,8 @@ importers:
         specifier: 2.1.4
         version: 2.1.4
       '@types/node':
-        specifier: 20.12.12
-        version: 20.12.12
+        specifier: 22.10.2
+        version: 22.10.2
       '@types/supertest':
         specifier: 6.0.2
         version: 6.0.2
@@ -65,7 +65,7 @@ importers:
         version: 7.10.0(eslint@8.57.0)(typescript@5.4.5)
       '@vitest/coverage-v8':
         specifier: 1.6.0
-        version: 1.6.0(vitest@1.6.0(@types/node@20.12.12))
+        version: 1.6.0(vitest@1.6.0(@types/node@22.10.2))
       eslint:
         specifier: 8.57.0
         version: 8.57.0
@@ -74,7 +74,7 @@ importers:
         version: 9.1.0(eslint@8.57.0)
       eslint-plugin-vitest:
         specifier: 0.4.0
-        version: 0.4.0(@typescript-eslint/eslint-plugin@7.10.0(@typescript-eslint/parser@7.10.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)(typescript@5.4.5)(vitest@1.6.0(@types/node@20.12.12))
+        version: 0.4.0(@typescript-eslint/eslint-plugin@7.10.0(@typescript-eslint/parser@7.10.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)(typescript@5.4.5)(vitest@1.6.0(@types/node@22.10.2))
       husky:
         specifier: 9.0.11
         version: 9.0.11
@@ -104,10 +104,10 @@ importers:
         version: 2.0.0(typescript@5.4.5)
       vite-tsconfig-paths:
         specifier: 4.3.2
-        version: 4.3.2(typescript@5.4.5)(vite@5.2.13(@types/node@20.12.12))
+        version: 4.3.2(typescript@5.4.5)(vite@5.2.13(@types/node@22.10.2))
       vitest:
         specifier: 1.6.0
-        version: 1.6.0(@types/node@20.12.12)
+        version: 1.6.0(@types/node@22.10.2)
 
 packages:
 
@@ -765,8 +765,8 @@ packages:
   '@types/mime-types@2.1.4':
     resolution: {integrity: sha512-lfU4b34HOri+kAY5UheuFMWPDOI+OPceBSHZKp69gEyTL/mmJ4cnU6Y/rlme3UL3GyOn6Y42hyIEw0/q8sWx5w==}
 
-  '@types/node@20.12.12':
-    resolution: {integrity: sha512-eWLDGF/FOSPtAvEqeRAQ4C8LSA7M1I7i0ky1I8U7kD1J5ITyW3AsRhQrKVoWf5pFKZ2kILsEGJhsI9r93PYnOw==}
+  '@types/node@22.10.2':
+    resolution: {integrity: sha512-Xxr6BBRCAOQixvonOye19wnzyDiUtTeqldOOmj3CkeblonbccA12PFwlufvRdrpjXxqnmUaeiU5EOA+7s5diUQ==}
 
   '@types/resolve@1.20.2':
     resolution: {integrity: sha512-60BCwRFOZCQhDncwQdxxeOEEkbc5dIMccYLwbxsS4TUNeVECQ/pBJ0j09mrHOl/JJvpRPGwO9SvE4nR2Nb/a4Q==}
@@ -1344,6 +1344,7 @@ packages:
   eslint@8.57.0:
     resolution: {integrity: sha512-dZ6+mexnaTIbSBZWgou51U6OmzIhYM2VcNdtiTtI7qPNZm35Akpr0f6vtw3w1Kmn5PYo+tZVfh13WrhpS6oLqQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
 
   espree@9.6.1:
@@ -2625,8 +2626,8 @@ packages:
       typescript:
         optional: true
 
-  undici-types@5.26.5:
-    resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
+  undici-types@6.20.0:
+    resolution: {integrity: sha512-Ny6QZ2Nju20vw1SRHe3d9jVu6gJ+4e3+MMpqu7pqE5HT6WsTSlce++GQmK5UXS8mzV8DSYHrQH+Xrf2jVcuKNg==}
 
   unicorn-magic@0.1.0:
     resolution: {integrity: sha512-lRfVq8fE8gz6QMBuDM6a+LO3IAzTi05H6gCVaUpir2E1Rwpo4ZUog45KpNXKC/Mn3Yb9UDuHumeFTo9iV/D9FQ==}
@@ -3327,9 +3328,9 @@ snapshots:
 
   '@types/mime-types@2.1.4': {}
 
-  '@types/node@20.12.12':
+  '@types/node@22.10.2':
     dependencies:
-      undici-types: 5.26.5
+      undici-types: 6.20.0
 
   '@types/resolve@1.20.2': {}
 
@@ -3337,7 +3338,7 @@ snapshots:
     dependencies:
       '@types/cookiejar': 2.1.5
       '@types/methods': 1.1.4
-      '@types/node': 20.12.12
+      '@types/node': 22.10.2
 
   '@types/supertest@6.0.2':
     dependencies:
@@ -3465,7 +3466,7 @@ snapshots:
 
   '@ungap/structured-clone@1.2.0': {}
 
-  '@vitest/coverage-v8@1.6.0(vitest@1.6.0(@types/node@20.12.12))':
+  '@vitest/coverage-v8@1.6.0(vitest@1.6.0(@types/node@22.10.2))':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@bcoe/v8-coverage': 0.2.3
@@ -3480,7 +3481,7 @@ snapshots:
       std-env: 3.7.0
       strip-literal: 2.1.0
       test-exclude: 6.0.0
-      vitest: 1.6.0(@types/node@20.12.12)
+      vitest: 1.6.0(@types/node@22.10.2)
     transitivePeerDependencies:
       - supports-color
 
@@ -3968,13 +3969,13 @@ snapshots:
     dependencies:
       eslint: 8.57.0
 
-  eslint-plugin-vitest@0.4.0(@typescript-eslint/eslint-plugin@7.10.0(@typescript-eslint/parser@7.10.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)(typescript@5.4.5)(vitest@1.6.0(@types/node@20.12.12)):
+  eslint-plugin-vitest@0.4.0(@typescript-eslint/eslint-plugin@7.10.0(@typescript-eslint/parser@7.10.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)(typescript@5.4.5)(vitest@1.6.0(@types/node@22.10.2)):
     dependencies:
       '@typescript-eslint/utils': 7.13.0(eslint@8.57.0)(typescript@5.4.5)
       eslint: 8.57.0
     optionalDependencies:
       '@typescript-eslint/eslint-plugin': 7.10.0(@typescript-eslint/parser@7.10.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)(typescript@5.4.5)
-      vitest: 1.6.0(@types/node@20.12.12)
+      vitest: 1.6.0(@types/node@22.10.2)
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -5308,7 +5309,7 @@ snapshots:
       - supports-color
       - vue-tsc
 
-  undici-types@5.26.5: {}
+  undici-types@6.20.0: {}
 
   unicorn-magic@0.1.0: {}
 
@@ -5338,13 +5339,13 @@ snapshots:
 
   util-deprecate@1.0.2: {}
 
-  vite-node@1.6.0(@types/node@20.12.12):
+  vite-node@1.6.0(@types/node@22.10.2):
     dependencies:
       cac: 6.7.14
       debug: 4.3.5
       pathe: 1.1.2
       picocolors: 1.0.1
-      vite: 5.2.13(@types/node@20.12.12)
+      vite: 5.2.13(@types/node@22.10.2)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -5355,27 +5356,27 @@ snapshots:
       - supports-color
       - terser
 
-  vite-tsconfig-paths@4.3.2(typescript@5.4.5)(vite@5.2.13(@types/node@20.12.12)):
+  vite-tsconfig-paths@4.3.2(typescript@5.4.5)(vite@5.2.13(@types/node@22.10.2)):
     dependencies:
       debug: 4.3.5
       globrex: 0.1.2
       tsconfck: 3.1.0(typescript@5.4.5)
     optionalDependencies:
-      vite: 5.2.13(@types/node@20.12.12)
+      vite: 5.2.13(@types/node@22.10.2)
     transitivePeerDependencies:
       - supports-color
       - typescript
 
-  vite@5.2.13(@types/node@20.12.12):
+  vite@5.2.13(@types/node@22.10.2):
     dependencies:
       esbuild: 0.20.2
       postcss: 8.4.38
       rollup: 4.18.0
     optionalDependencies:
-      '@types/node': 20.12.12
+      '@types/node': 22.10.2
       fsevents: 2.3.3
 
-  vitest@1.6.0(@types/node@20.12.12):
+  vitest@1.6.0(@types/node@22.10.2):
     dependencies:
       '@vitest/expect': 1.6.0
       '@vitest/runner': 1.6.0
@@ -5394,11 +5395,11 @@ snapshots:
       strip-literal: 2.1.0
       tinybench: 2.8.0
       tinypool: 0.8.4
-      vite: 5.2.13(@types/node@20.12.12)
-      vite-node: 1.6.0(@types/node@20.12.12)
+      vite: 5.2.13(@types/node@22.10.2)
+      vite-node: 1.6.0(@types/node@22.10.2)
       why-is-node-running: 2.2.2
     optionalDependencies:
-      '@types/node': 20.12.12
+      '@types/node': 22.10.2
     transitivePeerDependencies:
       - less
       - lightningcss
