@@ -1,7 +1,7 @@
 {
   "name": "@leo-h/create-nodejs-app",
   "version": "0.0.0-semantic-release",
-  "packageManager": "pnpm@9.15.0",
+  "packageManager": "pnpm@9.15.1",
   "author": "Leonardo Henrique <leonardo0507.business@gmail.com>",
   "description": "Create a modern Node.js app with TypeScript using one command.",
   "license": "MIT",
@@ -52,7 +52,7 @@
     "@types/node": "22.10.2",
     "@types/prompts": "2.4.9",
     "@types/validate-npm-package-name": "4.0.2",
-    "@vitest/eslint-plugin": "1.1.18",
+    "@vitest/eslint-plugin": "1.1.20",
     "conventional-changelog-conventionalcommits": "8.0.0",
     "eslint": "9.17.0",
     "eslint-config-prettier": "9.1.0",
