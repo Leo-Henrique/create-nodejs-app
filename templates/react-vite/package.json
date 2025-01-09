@@ -1,12 +1,16 @@
 {
   "name": "app-name",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "start:dev": "vite",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --max-warnings 0 --cache",
+    "lint:fix": "pnpm lint --fix",
+    "format": "prettier . --write --cache",
     "build": "tsc -b && vite build",
-    "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
