@@ -1,11 +1,14 @@
+import { Helmet, HelmetProvider } from "react-helmet-async";
+import { RouterProvider } from "react-router/dom";
 import { env } from "./env";
+import { router } from "./routes";
 
 export function App() {
   return (
-    <>
-      <p>Hello world!</p>
+    <HelmetProvider>
+      <Helmet titleTemplate={`%s | ${env.APP_NAME}`}></Helmet>
 
-      <p>Project name is: "{env.APP_NAME}"!</p>
-    </>
+      <RouterProvider router={router} />
+    </HelmetProvider>
   );
 }
