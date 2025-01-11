@@ -2,6 +2,10 @@ import { z } from "zod";
 
 const schema = z.object({
   APP_NAME: z.string(),
+  APP_API_BASE_URL: z
+    .string()
+    .url()
+    .transform(val => new URL(val).toString()),
 });
 
 const parsedEnv = schema.safeParse(import.meta.env);
