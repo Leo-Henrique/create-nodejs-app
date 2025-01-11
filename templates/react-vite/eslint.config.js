@@ -6,7 +6,9 @@ import globals from "globals";
 import typescriptEslint from "typescript-eslint";
 
 export default typescriptEslint.config(
-  { ignores: ["dist"] },
+  {
+    ignores: ["dist", "src/api/orval"],
+  },
   {
     extends: [
       js.configs.recommended,
