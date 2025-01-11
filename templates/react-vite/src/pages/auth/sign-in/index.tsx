@@ -61,7 +61,7 @@ export function SignIn() {
               {...signInForm.register("password")}
               type="password"
               placeholder="Your password"
-              autoComplete="email"
+              autoComplete="current-password"
               autoCapitalize="none"
               autoCorrect="off"
             />
