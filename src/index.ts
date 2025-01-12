@@ -10,13 +10,19 @@ import packageJson from "../package.json";
 import { copyTemplateCompose } from "./compose-app/copy-template.compose";
 import { replaceContentInFileCompose } from "./compose-app/replace-content-in-file.compose";
 import { GENERATED_APP_TARGET_ROOT_PATH } from "./config";
+import { ValidationData } from "./core/validation";
 import { successLog } from "./utils/logs";
 import { onCancelPrompt } from "./utils/on-cancel";
 import {
-  FrameworkValidation,
-  ValidFrameworks,
-  frameworks,
-} from "./validations/framework.validation";
+  BackEndFrameworkValidation,
+  BackEndValidFrameworks,
+  backEndFrameworks,
+} from "./validations/back-end-framework.validation";
+import {
+  FrontEndFrameworkValidation,
+  FrontEndValidFrameworks,
+  frontEndFrameworks,
+} from "./validations/front-end-framework.validation";
 import {
   PackageManagerValidation,
   ValidPackageManagers,
@@ -32,8 +38,15 @@ import {
 interface CliOptions {
   packageManager: ValidPackageManagers;
   template: ValidTemplates;
-  framework: ValidFrameworks;
+  framework: BackEndValidFrameworks | FrontEndValidFrameworks;
 }
+
+type InputsByCliDefinition = {
+  [K: string]: {
+    value: string;
+    validation: ValidationData | null;
+  };
+};
 
 const program = new Command()
   .name(packageJson.name)
@@ -57,7 +70,7 @@ program
     "Framework that will be used in the project.",
   )
   .action(async (projectDirectoryArgument, options: CliOptions) => {
-    const input = {
+    const inputsByCli = {
       projectDirectory: {
         value: projectDirectoryArgument,
         validation: ProjectNameValidation.create({
@@ -78,20 +91,33 @@ program
       },
       framework: {
         value: options.framework,
-        validation: FrameworkValidation.create({
-          framework: options.framework,
-        }),
+        validation:
+          options.template === "api"
+            ? BackEndFrameworkValidation.create({
+                framework: options.framework,
+              })
+            : options.template === "front-end"
+              ? FrontEndFrameworkValidation.create({
+                  framework: options.framework,
+                })
+              : null,
       },
-    };
-    const inputFields = Object.keys(input) as (keyof typeof input)[];
+    } satisfies InputsByCliDefinition;
 
-    for (const field of inputFields) {
-      const fieldData = input[field];
+    const inputByCliFields = Object.keys(
+      inputsByCli,
+    ) as (keyof typeof inputsByCli)[];
 
-      if (fieldData.value) await fieldData.validation.fromCli();
+    for (const inputByCliField of inputByCliFields) {
+      const inputByCli = inputsByCli[inputByCliField];
+
+      if (!inputByCli.value || !inputByCli.validation) continue;
+
+      await inputByCli.validation.fromCli();
     }
 
-    const { projectDirectory, packageManager, template, framework } = input;
+    const { projectDirectory, packageManager, template, framework } =
+      inputsByCli;
 
     const promptsResponse = await prompts(
       [
@@ -100,7 +126,8 @@ program
           name: "projectDirectory",
           message: "What is your project name?",
           validate: async val =>
-            await projectDirectory.validation.fromPrompt({ path: val }),
+            (await projectDirectory.validation?.fromPrompt({ path: val })) ??
+            true,
         },
         {
           type: !packageManager.value ? "select" : null,
@@ -117,9 +144,12 @@ program
         },
         {
           type: (_, answers) => {
+            const templatesThatAllowToChooseFramework = ["api", "front-end"];
+
             if (
               !framework.value &&
-              (template.value === "api" || answers.template === "api")
+              (templatesThatAllowToChooseFramework.includes(template.value) ||
+                templatesThatAllowToChooseFramework.includes(answers.template))
             )
               return "select";
 
@@ -127,19 +157,29 @@ program
           },
           name: "framework",
           message: "What is your favorite framework?",
-          choices: frameworks as unknown as Choice[],
+          choices: (_, answers) => {
+            if (answers.template === "api")
+              return backEndFrameworks as unknown as Choice[];
+
+            if (answers.template === "front-end")
+              return frontEndFrameworks as unknown as Choice[];
+
+            return [...backEndFrameworks, ...frontEndFrameworks] as Choice[];
+          },
         },
       ],
       { onCancel: onCancelPrompt },
     );
 
-    for (const field of inputFields) {
-      const promptFieldResponse = promptsResponse[field];
+    for (const inputByCliField of inputByCliFields) {
+      const promptFieldResponse =
+        promptsResponse[inputByCliField as keyof typeof promptsResponse];
 
-      if (promptFieldResponse) input[field].value = promptFieldResponse;
+      if (promptFieldResponse)
+        inputsByCli[inputByCliField].value = promptFieldResponse;
     }
 
-    if (framework.value) input.template.value = "api";
+    if (framework.value) inputsByCli.template.value = "api";
 
     const projectName = basename(projectDirectory.value);
 

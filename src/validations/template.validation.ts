@@ -10,6 +10,10 @@ export const templates = [
     title: "API",
     value: "api",
   },
+  {
+    title: "Front-end",
+    value: "front-end",
+  },
 ] as const;
 
 export const validTemplates = getValidOptionsFromSelect(templates);
