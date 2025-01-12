@@ -214,5 +214,31 @@ describe("[CLI] should be able to run and use program with a cli", () => {
         expect.arrayContaining(nestTemplateFiles),
       );
     });
+
+    it("should be able to create a project with a react framework with vite", async () => {
+      const sut = run([
+        projectName,
+        "--package-manager",
+        "pnpm",
+        "--framework",
+        "react-vite",
+      ]);
+
+      expect(sut).toContain(SUCCESS_MESSAGE);
+
+      let [
+        reactViteTemplateFiles,
+        generatedProjectFiles, // eslint-disable-line prefer-const
+      ] = await Promise.all([
+        readdir(resolve(TEMPLATES_PATH, "react-vite")),
+        readdir(resolve(GENERATED_APP_TARGET_ROOT_PATH, projectName)),
+      ]);
+
+      reactViteTemplateFiles = validTemplatePaths(reactViteTemplateFiles);
+
+      expect(generatedProjectFiles).toEqual(
+        expect.arrayContaining(reactViteTemplateFiles),
+      );
+    });
   });
 });
