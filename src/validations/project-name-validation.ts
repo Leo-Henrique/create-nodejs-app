@@ -32,11 +32,16 @@ export class ProjectNameValidation extends Validation<ProjectNameValidationParam
 
     const npmPackageNameValidation = validateNpmPackageName(name);
 
-    if (!npmPackageNameValidation.validForNewPackages)
+    if (!npmPackageNameValidation.validForNewPackages) {
+      const error = npmPackageNameValidation.errors?.[0];
+
       return {
         isValid: false,
-        issue: capitalizeFirstWord(npmPackageNameValidation.errors![0]),
+        issue: error
+          ? capitalizeFirstWord(error)
+          : "Invalid name for unknown reason. Try another name.",
       };
+    }
 
     return { isValid: true };
   }
