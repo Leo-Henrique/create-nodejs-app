@@ -6,7 +6,9 @@ export type ValidationResult =
     }
   | { isValid: false; issue: string };
 
-export abstract class Validation<Params> {
+export type ValidationData = ReturnType<Validation["createValidation"]>;
+
+export abstract class Validation<Params = unknown> {
   protected params!: Params;
 
   abstract validate(): Promise<ValidationResult>;

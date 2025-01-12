@@ -1,0 +1,46 @@
+name: Code check
+
+on: [push, pull_request]
+
+jobs:
+  code-check:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        project: [., ./templates/clean, ./templates/fastify, ./templates/nest]
+
+    name: Code check (${{ matrix.project }})
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: |
+          cd ${{ matrix.project }}
+          pnpm install
+
+      - name: Run type check
+        run: |
+          cd ${{ matrix.project }}
+          pnpm typecheck
+
+      - name: Run lint
+        run: |
+          cd ${{ matrix.project }}
+          pnpm lint
+
+      - name: Run formatting code check
+        run: |
+          cd ${{ matrix.project }}
+          pnpm prettier . --check
