@@ -12,11 +12,7 @@ export async function swrFetcher<Output extends SwrFetcherOutput>(
   url: RequestInfo | URL,
   options?: RequestInit,
 ): Promise<Output> {
-  const apiBaseUrl = new URL(env.APP_API_BASE_URL);
-  const endpointUrl = new URL(url.toString());
 
-  endpointUrl.host = apiBaseUrl.host;
-  endpointUrl.protocol = apiBaseUrl.protocol;
 
   const response = await fetch(endpointUrl, options);
   let body: unknown;
