@@ -55,8 +55,8 @@ importers:
         specifier: 9.17.0
         version: 9.17.0
       eslint-config-prettier:
-        specifier: 9.1.0
-        version: 9.1.0(eslint@9.17.0)
+        specifier: 10.0.2
+        version: 10.0.2(eslint@9.17.0)
       eslint-plugin-react-hooks:
         specifier: 5.0.0
         version: 5.0.0(eslint@9.17.0)
@@ -1268,8 +1268,8 @@ packages:
     resolution: {integrity: sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==}
     engines: {node: '>=10'}
 
-  eslint-config-prettier@9.1.0:
-    resolution: {integrity: sha512-NSWl5BFQWEPi1j4TjVNItzYV7dZXZ+wP6I6ZhrBGpChQhZRUaElihE9uRRkcbRnNb76UMKDF3r+WTmNcGPKsqw==}
+  eslint-config-prettier@10.0.2:
+    resolution: {integrity: sha512-1105/17ZIMjmCOJOPNfVdbXafLCLj3hPmkmB7dLgt7XsQ/zkxSuDerE/xgO3RxoHysR1N1whmquY0lSn2O0VLg==}
     hasBin: true
     peerDependencies:
       eslint: '>=7.0.0'
@@ -1765,6 +1765,7 @@ packages:
 
   lodash.get@4.4.2:
     resolution: {integrity: sha512-z+Uw/vLuy6gQe8cfaFWD7p0wVv8fJl3mbzXh33RS+0oW2wvUqiRXiQ69gLWSLpgB5/6sU+r6BlQR0MBILadqTQ==}
+    deprecated: This package is deprecated. Use the optional chaining (?.) operator instead.
 
   lodash.isempty@4.4.0:
     resolution: {integrity: sha512-oKMuF3xEeqDltrGMfDxAPGIVMSSRv8tbRSODbrs4KGsRRLEhrW8N8Rd4DRgB2+621hY8A8XwwrTVhXWpxFvMzg==}
@@ -1774,6 +1775,7 @@ packages:
 
   lodash.omit@4.5.0:
     resolution: {integrity: sha512-XeqSp49hNGmlkj2EJlfrQFIzQ6lXdNro9sddtQzcJY8QaoC2GO0DT7xaIokHeyM+mIT0mPMlPvkYzg2xCuHdZg==}
+    deprecated: This package is deprecated. Use destructuring assignment syntax instead.
 
   lodash.omitby@4.6.0:
     resolution: {integrity: sha512-5OrRcIVR75M288p4nbI2WLAf3ndw2GD9fyNv3Bc15+WCxJDdZ4lYndSxGd7hnG6PVjiJTeJE2dHEGhIuKGicIQ==}
@@ -3940,7 +3942,7 @@ snapshots:
 
   escape-string-regexp@4.0.0: {}
 
-  eslint-config-prettier@9.1.0(eslint@9.17.0):
+  eslint-config-prettier@10.0.2(eslint@9.17.0):
     dependencies:
       eslint: 9.17.0
 
