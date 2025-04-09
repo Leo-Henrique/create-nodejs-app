@@ -1,9 +1,10 @@
 import { mergeConfig } from "vitest/config";
+import { controllersFileNameSuffix } from "./src/http/plugins/routes.plugin";
 import defaultConfig from "./vitest.config.mjs";
 
 export default mergeConfig(defaultConfig, {
   test: {
-    include: ["./**/*.integration-spec.ts"],
-    setupFiles: ["./test/integration/setup.ts"],
+    include: [`./src/**/*${controllersFileNameSuffix}.spec.ts`],
+    fileParallelism: false,
   },
 });
