@@ -1,9 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended",
-    "schedule:automergeEarlyMondays"
-  ],
+  "extends": ["config:recommended", "schedule:automergeEarlyMondays"],
   "labels": ["dependencies"],
   "rangeStrategy": "bump",
   "packageRules": [
