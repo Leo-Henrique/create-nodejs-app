@@ -2,8 +2,7 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended",
-    "schedule:automergeEarlyMondays",
-    "group:allNonMajor"
+    "schedule:automergeEarlyMondays"
   ],
   "labels": ["dependencies"],
   "rangeStrategy": "bump",
