@@ -38,7 +38,7 @@ export async function routesPlugin(app: FastifyInstance) {
   for (const controller of controllers) {
     if (!controller.imports.default) {
       throw new Error(
-        `The controller file in "${controller.pathFromSrc}" does not have default import.`,
+        `The controller file in "${controller.pathFromSrc}" does not have default export.`,
       );
     }
 
