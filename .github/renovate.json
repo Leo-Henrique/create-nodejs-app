@@ -5,7 +5,8 @@
   "rangeStrategy": "bump",
   "packageRules": [
     {
-      "description": "Automerge non-major updates",
+      "description": "Automerge",
+      "matchUpdateTypes": ["patch", "minor", "major"],
       "automerge": true
     }
   ]
