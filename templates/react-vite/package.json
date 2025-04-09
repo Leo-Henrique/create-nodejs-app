@@ -15,7 +15,7 @@
     "orval:generate": "tsx --env-file=.env ./scripts/orval-generate-api-definition.ts"
   },
   "dependencies": {
-    "@hookform/resolvers": "3.10.0",
+    "@hookform/resolvers": "5.0.1",
     "i18next": "24.2.3",
     "react": "18.3.1",
     "react-dom": "18.3.1",
