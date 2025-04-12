@@ -9,9 +9,11 @@ export type ZodRestrictFieldsShape<Target> = {
 };
 
 export type ZodUnrestrictShape<Target> = {
-  [K in keyof Target]?: ZodType<Target[K]>;
+  [K in keyof Target | (string & {})]?: K extends keyof Target
+    ? ZodType<Target[K]>
+    : ZodTypeAny;
 };
 
 export type ZodUnrestrictFieldsShape<Target> = {
-  [K in keyof Target]?: ZodTypeAny;
+  [K in keyof Target | (string & {})]?: ZodTypeAny;
 };
