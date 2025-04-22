@@ -8,7 +8,7 @@ export function createTestRequest<Params extends InjectOptions>(
     "method" | "url"
   >,
 ) {
-  return async (params: Params) => {
+  return async (params: Merge<InjectOptions, Params>) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { body, json, ...restResult } = await app.inject({
       ...(defaultParams as object),
