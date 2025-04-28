@@ -21,7 +21,7 @@
     "react-dom": "18.3.1",
     "react-helmet-async": "2.0.5",
     "react-hook-form": "7.55.0",
-    "react-router": "7.4.1",
+    "react-router": "7.5.2",
     "swr": "2.3.3",
     "zod": "3.24.2",
     "zod-i18n-map": "2.27.0"
