@@ -1,13 +1,14 @@
 import { useCurrentRouteHandleParams } from "@/hooks/use-current-route-handle-params";
-import { Helmet } from "react-helmet-async";
+import { publicEnv } from "@/public-env";
 import { Outlet } from "react-router";
 
 export function AuthLayout() {
   const { handleParams } = useCurrentRouteHandleParams();
+  const title = `${handleParams.metadata.title} | ${publicEnv.APP_NAME}`;
 
   return (
     <>
-      <Helmet title={handleParams.metadata.title} />
+      <title>{title}</title>
 
       <div>
         <Outlet />
