@@ -1,6 +1,5 @@
 import { publicEnv } from "@/public-env";
-import { ApiError } from "./errors/api-error";
-import { ApiUnexpectedResponseError } from "./errors/api-unexpected-response-error";
+import { ApiError, ApiUnexpectedResponseError } from "./errors";
 
 type SwrFetcherOutput = {
   body: unknown;
