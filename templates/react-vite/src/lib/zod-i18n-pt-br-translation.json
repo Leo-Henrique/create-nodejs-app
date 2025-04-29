@@ -1,0 +1,101 @@
+{
+  "types": {
+    "number": "número",
+    "string": "texto",
+    "integer": "número inteiro",
+    "boolean": "verdadeiro ou falso",
+    "date": "data",
+    "bigint": "número",
+    "undefined": "vazio",
+    "null": "vazio",
+    "array": "lista",
+    "object": "objeto"
+  },
+  "errors": {
+    "invalid_type": "O campo deve ser {{expected}}, foi recebido {{received}}.",
+    "invalid_type_received_undefined": "O campo é obrigatório.",
+    "invalid_type_received_null": "O campo não pode estar nulo.",
+    "invalid_literal": "O campo deve ser apenas '{{expected}}'.",
+    "unrecognized_keys": "O campo contém chave(s) não reconhecida(s) no objeto: {{- keys}}.",
+    "invalid_union": "O campo é inválido.",
+    "invalid_union_discriminator": "O campo deve conter apenas os seguintes valores: {{- options}}.",
+    "invalid_enum_value": "O campo deve conter apenas os seguintes valores: {{- options}}.",
+    "invalid_date": "A data é inválida.",
+    "custom": "O campo é inválido.",
+    "invalid_intersection_types": "O campo '{{path}}' não pode conter valores mesclados.",
+    "not_multiple_of": "O número deve ser múltiplo de {{multipleOf}}.",
+    "not_finite": "O número não pode ser infinito.",
+    "invalid_string": {
+      "email": "O e-mail é inválido.",
+      "url": "A URL é inválida.",
+      "uuid": "O UUID é inválido.",
+      "cuid": "O CUID é inválido.",
+      "regex": "O campo é inválido.",
+      "datetime": "A data e a hora são inválidos.",
+      "startsWith": "O campo só pode iniciar com \"{{startsWith}}\".",
+      "endsWith": "O campo só pode iniciar com \"{{endsWith}}\"."
+    },
+    "too_small": {
+      "array": {
+        "exact": "Adicione exatamente {{minimum}} item / itens.",
+        "inclusive": "Adicione no mínimo {{minimum}} item / itens.",
+        "not_inclusive": "Adicione mais de {{minimum}} item / itens."
+      },
+      "string": {
+        "exact": "O campo deve conter exatamente {{minimum}} caractere(s).",
+        "inclusive": "O campo deve conter no mínimo {{minimum}} caractere(s).",
+        "not_inclusive": "O campo deve conter mais de {{minimum}} caractere(s)."
+      },
+      "number": {
+        "exact": "O número deve conter exatamente {{minimum}} caractere(s).",
+        "inclusive": "O número deve ser maior ou igual a {{minimum}}.",
+        "not_inclusive": "O número deve ser maior que {{minimum}}."
+      },
+      "set": {
+        "exact": "O campo é inválido.",
+        "inclusive": "O campo é inválido.",
+        "not_inclusive": "O campo é inválido."
+      },
+      "date": {
+        "exact": "A data deve ser exatamente igual a {{- maximum, datetime}}.",
+        "inclusive": "A data deve ser maior ou igual a {{- minimum, datetime}}.",
+        "not_inclusive": "A data deve ser maior que {{- minimum, datetime}}."
+      }
+    },
+    "too_big": {
+      "array": {
+        "exact": "Adicione exatamente {{maximum}} item / itens.",
+        "inclusive": "Adicione no máximo {{maximum}} item / itens.",
+        "not_inclusive": "Adicione menos de {{maximum}} item / itens."
+      },
+      "string": {
+        "exact": "O campo deve conter exatamente {{maximum}} caractere(s).",
+        "inclusive": "O campo deve conter no máximo {{maximum}} caractere(s).",
+        "not_inclusive": "O campo deve conter menos de {{maximum}} caractere(s)."
+      },
+      "number": {
+        "exact": "O número deve conter exatamente {{maximum}} caractere(s).",
+        "inclusive": "O número deve ser menor ou igual a {{maximum}}.",
+        "not_inclusive": "O número deve ser menor que {{maximum}}."
+      },
+      "set": {
+        "exact": "O campo é inválido.",
+        "inclusive": "O campo é inválido.",
+        "not_inclusive": "O campo é inválido."
+      },
+      "date": {
+        "exact": "A data deve ser exatamente igual a {{- maximum, datetime}}.",
+        "inclusive": "A data deve ser menor ou igual a {{- maximum, datetime}}.",
+        "not_inclusive": "A data deve ser menor que {{- maximum, datetime}}."
+      }
+    }
+  },
+  "validations": {
+    "email": "email",
+    "url": "url",
+    "uuid": "uuid",
+    "cuid": "cuid",
+    "regex": "regex",
+    "datetime": "datetime"
+  }
+}
