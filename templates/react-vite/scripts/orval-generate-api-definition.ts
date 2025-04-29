@@ -1,9 +1,9 @@
+import { privateEnv } from "@/private-env";
 import { execSync } from "node:child_process";
 import { existsSync } from "node:fs";
 import { mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { generate } from "orval";
-import { z } from "zod";
 import { orvalCustomConfig } from "../orval.config";
 
 export type OrvalCustomConfig = {
@@ -19,25 +19,8 @@ export type OrvalCustomConfig = {
   };
 };
 
-const envSchemaFromNodeEnvironment = z.object({
-  API_JSON_DOCS_URL: z
-    .string()
-    .url()
-    .transform(val => new URL(val).toString()),
-});
-
-const parsedEnv = envSchemaFromNodeEnvironment.safeParse(process.env);
-
-if (!parsedEnv.success) {
-  console.error(parsedEnv.error.flatten().fieldErrors);
-
-  throw new Error("Invalid environment variables.");
-}
-
-const env = parsedEnv.data;
-
 (async () => {
-  const apiJsonDocsResponse = await fetch(env.API_JSON_DOCS_URL);
+  const apiJsonDocsResponse = await fetch(privateEnv.API_JSON_DOCS_URL);
   const apiJsonDocs = await apiJsonDocsResponse.text();
   const apiJsonDocsDirPath = dirname(orvalCustomConfig.apiDocs.outputPath);
 

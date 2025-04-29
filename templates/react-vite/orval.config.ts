@@ -3,14 +3,14 @@ import { OrvalCustomConfig } from "./scripts/orval-generate-api-definition";
 
 export const orvalCustomConfig: OrvalCustomConfig = {
   apiDocs: {
-    outputPath: "./src/api/docs.json",
+    outputPath: "./api/docs.json",
   },
   endpoints: {
-    outputPath: "./src/api/orval/endpoints",
-    replaceVoidTypeToAnyOnResponse: true,
+    outputPath: "./api/orval/endpoints",
+    replaceVoidTypeToAnyOnResponse: false,
   },
   zodSchemas: {
-    outputPath: "./src/api/orval/schemas",
+    outputPath: "./api/orval/schemas",
   },
 };
 
@@ -21,20 +21,12 @@ export default defineConfig({
       target: orvalCustomConfig.endpoints.outputPath,
       client: "swr",
       httpClient: "fetch",
-      baseUrl: new URL(process.env.APP_API_BASE_URL!).toString(),
       mode: "tags",
       clean: true,
       override: {
         mutator: {
-          path: "./src/api/swr-fetcher.ts",
+          path: "./api/swr-fetcher.ts",
           name: "swrFetcher",
-        },
-        swr: {
-          swrOptions: {
-            errorRetryCount: 3,
-            errorRetryInterval: 3500,
-            revalidateOnFocus: false,
-          },
         },
       },
     },

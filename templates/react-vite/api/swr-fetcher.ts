@@ -1,4 +1,4 @@
-import { env } from "@/env";
+import { publicEnv } from "@/public-env";
 import { ApiError } from "./errors/api-error";
 import { ApiUnexpectedResponseError } from "./errors/api-unexpected-response-error";
 
@@ -9,14 +9,16 @@ type SwrFetcherOutput = {
 };
 
 export async function swrFetcher<Output extends SwrFetcherOutput>(
-  url: RequestInfo | URL,
-  options?: RequestInit,
+  endpointUrl: RequestInfo | URL,
+  options: RequestInit,
 ): Promise<Output> {
-  const apiBaseUrl = new URL(env.APP_API_BASE_URL);
-  const endpointUrl = new URL(url.toString());
+  const url = new URL(publicEnv.API_BASE_URL);
 
-  endpointUrl.host = apiBaseUrl.host;
-  endpointUrl.protocol = apiBaseUrl.protocol;
+  if (url.pathname.endsWith("/")) {
+    url.pathname = endpointUrl.toString();
+  } else {
+    url.pathname += endpointUrl;
+  }
 
   const response = await fetch(endpointUrl, options);
   let body: unknown;
@@ -28,7 +30,7 @@ export async function swrFetcher<Output extends SwrFetcherOutput>(
     try {
       body = await response.json();
     } catch {
-      body = {};
+      body = null;
     }
   }
 

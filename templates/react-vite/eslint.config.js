@@ -7,7 +7,7 @@ import typescriptEslint from "typescript-eslint";
 
 export default typescriptEslint.config(
   {
-    ignores: ["dist", "src/api/orval"],
+    ignores: ["dist", "api/orval"],
   },
   {
     extends: [

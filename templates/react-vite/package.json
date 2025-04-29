@@ -12,7 +12,7 @@
     "format": "prettier . --write --cache",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "orval:generate": "tsx --env-file=.env ./scripts/orval-generate-api-definition.ts"
+    "orval:generate": "tsx --env-file=.env.development ./scripts/orval-generate-api-definition.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "5.0.1",
