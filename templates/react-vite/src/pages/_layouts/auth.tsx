@@ -1,14 +1,15 @@
-import { useCurrentRouteHandleParams } from "@/hooks/use-current-route-handle-params";
-import { publicEnv } from "@/public-env";
-import { Outlet } from "react-router";
+import { publicRoutes } from "@/routes";
+import { Outlet, useLocation } from "react-router";
 
 export function AuthLayout() {
-  const { handleParams } = useCurrentRouteHandleParams();
-  const title = `${handleParams.metadata.title} | ${publicEnv.APP_NAME}`;
+  const { pathname } = useLocation();
+  const currentPublicRoute = Object.values(publicRoutes).find(publicRoute => {
+    return publicRoute.path === pathname;
+  });
 
   return (
     <>
-      <title>{title}</title>
+      {currentPublicRoute && <title>{currentPublicRoute.title}</title>}
 
       <div>
         <Outlet />

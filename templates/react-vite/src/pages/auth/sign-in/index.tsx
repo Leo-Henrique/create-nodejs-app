@@ -1,3 +1,4 @@
+import { privateRoutes } from "@/routes";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
@@ -12,6 +13,8 @@ const signInFormSchema = z.object({
 type SignInForm = z.infer<typeof signInFormSchema>;
 
 export function SignIn() {
+  const navigate = useNavigate();
+
   const signInForm = useForm<SignInForm>({
     resolver: zodResolver(signInFormSchema),
     defaultValues: {
@@ -19,10 +22,9 @@ export function SignIn() {
       password: "",
     },
   });
-  const navigate = useNavigate();
   const onSignIn = async (input: SignInForm) => {
     console.log(input);
-    navigate("/dashboard");
+    navigate(privateRoutes.dashboard.path);
   };
 
   return (
