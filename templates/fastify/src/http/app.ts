@@ -12,8 +12,9 @@ import {
 import { env } from "../env";
 import { errorHandlerPlugin } from "./plugins/error-handler.plugin";
 import { notFoundErrorHandlerPlugin } from "./plugins/not-found-error-handler.plugin";
-import { swaggerUiPlugin } from "./plugins/swagger-ui.plugin";
 import { routesPlugin } from "./plugins/routes.plugin";
+import { swaggerUiPlugin } from "./plugins/swagger-ui.plugin";
+import { swaggerFileZodSchemaTransformPlugin } from "./plugins/swagger-file-zod-schema-transform.plugin";
 
 export const app = fastify().withTypeProvider<ZodTypeProvider>();
 export const appPrefix = "/v1";
@@ -31,7 +32,13 @@ app.register(fastifySwagger, {
     },
     servers: [],
   },
-  transform: jsonSchemaTransform,
+  transform: data => {
+    const jsonSchema = jsonSchemaTransform(data);
+
+    swaggerFileZodSchemaTransformPlugin(data, jsonSchema);
+
+    return jsonSchema;
+  },
 });
 app.register(swaggerUiPlugin);
 app.register(routesPlugin, { prefix: appPrefix });

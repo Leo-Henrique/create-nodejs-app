@@ -1,6 +1,8 @@
 import { FastifyZodReply, FastifyZodRequest } from "@/@types/fastify";
+import { FastifyError } from "fastify";
 import { hasZodFastifySchemaValidationErrors } from "fastify-type-provider-zod";
 import { BaseError, InternalServerError, ValidationError } from "../errors";
+import { multipartFormDataPluginErrorCodes } from "./multipart-form-data.plugin";
 
 export function errorHandlerPlugin(
   error: unknown,
@@ -22,6 +24,28 @@ export function errorHandlerPlugin(
 
     case hasZodFastifySchemaValidationErrors(error): {
       httpError = new ValidationError(error.validation);
+      break;
+    }
+
+    case error instanceof Error && error.name === "FastifyError": {
+      const fastifyError = error as FastifyError;
+
+      if (fastifyError.code.startsWith("FST_ERR_CTP")) {
+        httpError = new ValidationError(error);
+        break;
+      }
+
+      const multipartErrorCodes =
+        multipartFormDataPluginErrorCodes as unknown as string[];
+
+      if (multipartErrorCodes.includes(fastifyError.code)) {
+        if ("part" in error) delete error.part;
+
+        httpError = new ValidationError(error);
+        break;
+      }
+
+      httpError = new InternalServerError(error);
       break;
     }
 
