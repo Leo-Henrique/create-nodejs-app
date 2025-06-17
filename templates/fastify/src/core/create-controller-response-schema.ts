@@ -29,9 +29,18 @@ export function createControllerResponseSchema<
       >
     : ErrorInstance<ErrorClasses, K>["schema"];
 } {
-  const errorInstances = errorClasses.map(ErrorClass => {
-    return new ErrorClass();
-  });
+  const errorInstances = errorClasses
+    .map(ErrorClass => {
+      return new ErrorClass();
+    })
+    .filter((errorInstance, index, array) => {
+      const prevErrorInstances = array.slice(0, index);
+      const errorAlreadyFiltered = prevErrorInstances.some(({ error }) => {
+        return error === errorInstance.error;
+      });
+
+      return !errorAlreadyFiltered;
+    });
   const statusCodes = [
     ...new Set([
       ...Object.keys(successResponses),
