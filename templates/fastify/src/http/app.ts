@@ -13,8 +13,8 @@ import { env } from "../env";
 import { errorHandlerPlugin } from "./plugins/error-handler.plugin";
 import { notFoundErrorHandlerPlugin } from "./plugins/not-found-error-handler.plugin";
 import { routesPlugin } from "./plugins/routes.plugin";
-import { swaggerUiPlugin } from "./plugins/swagger-ui.plugin";
 import { swaggerFileZodSchemaTransformPlugin } from "./plugins/swagger-file-zod-schema-transform.plugin";
+import { swaggerUiPlugin } from "./plugins/swagger-ui.plugin";
 
 export const app = fastify().withTypeProvider<ZodTypeProvider>();
 export const appPrefix = "/v1";
