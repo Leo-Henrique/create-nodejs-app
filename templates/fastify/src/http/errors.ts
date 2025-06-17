@@ -35,7 +35,7 @@ export class InternalServerError extends BaseError {
   public readonly error = "INTERNAL_SERVER_ERROR";
   public readonly statusCode = 500;
   public readonly message =
-    "Desculpe, um erro inesperado ocorreu. Tente novamente alguns minutos ou nos contate.";
+    "Desculpe, um erro inesperado ocorreu. Tente novamente em alguns minutos ou nos contate.";
 
   public constructor(public debug: unknown) {
     super();
