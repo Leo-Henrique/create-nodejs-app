@@ -9,14 +9,26 @@ export function errorHandlerPlugin(
 ) {
   let httpError: BaseError;
 
-  if (error instanceof BaseError) {
-    httpError = error;
-  } else if (error instanceof SyntaxError) {
-    httpError = new ValidationError(error.message);
-  } else if (hasZodFastifySchemaValidationErrors(error)) {
-    httpError = new ValidationError(error.validation);
-  } else {
-    httpError = new InternalServerError(error);
+  switch (true) {
+    case error instanceof BaseError: {
+      httpError = error;
+      break;
+    }
+
+    case error instanceof SyntaxError: {
+      httpError = new ValidationError(error.message);
+      break;
+    }
+
+    case hasZodFastifySchemaValidationErrors(error): {
+      httpError = new ValidationError(error.validation);
+      break;
+    }
+
+    default: {
+      httpError = new InternalServerError(error);
+      break;
+    }
   }
 
   const isCriticalError = httpError.statusCode.toString().startsWith("5");
