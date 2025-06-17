@@ -7,10 +7,10 @@ export const helloControllerMethod = "GET" as const;
 export const helloControllerUrl = "/hello" as const;
 
 export type HelloControllerQueryParamsInput = z.input<
-  typeof helloControllerQueryParamsInputSchema
+  typeof helloControllerQueryParamsSchema
 >;
 
-const helloControllerQueryParamsInputSchema = z.object({
+const helloControllerQueryParamsSchema = z.object({
   show: z
     .enum(["true", "false"])
     .transform<boolean>(val => JSON.parse(val))
@@ -25,7 +25,7 @@ export default function helloController(app: FastifyZodInstance) {
       operationId: "helloController",
       tags: ["Hello"],
       summary: "Hello world!",
-      querystring: helloControllerQueryParamsInputSchema,
+      querystring: helloControllerQueryParamsSchema,
       response: createControllerResponseSchema(
         {
           200: z.object({
