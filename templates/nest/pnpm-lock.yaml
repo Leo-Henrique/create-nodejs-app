@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@anatine/zod-openapi':
-        specifier: 2.2.7
-        version: 2.2.7(openapi3-ts@4.3.3)(zod@3.24.2)
+        specifier: 2.2.8
+        version: 2.2.8(openapi3-ts@4.3.3)(zod@3.24.2)
       '@fastify/static':
         specifier: 8.1.1
         version: 8.1.1
@@ -127,8 +127,8 @@ packages:
     resolution: {integrity: sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw==}
     engines: {node: '>=6.0.0'}
 
-  '@anatine/zod-openapi@2.2.7':
-    resolution: {integrity: sha512-kv/bGowgSGHNY2d/KIzx941ym0/elc7xoBiPri31qEUqbDPOSIppiMOZ88AedaTtLk5J1K96++h0CEsHkgFFyQ==}
+  '@anatine/zod-openapi@2.2.8':
+    resolution: {integrity: sha512-iyM8mB556KdiZ6a1GTZ67ACLnJakU1hrzzXoh7PLaReldAdMq88MlZn/Ir/U56/TBuQctBhh/4seo0b0B343uw==}
     peerDependencies:
       openapi3-ts: ^4.1.2
       zod: ^3.20.0
@@ -3272,7 +3272,7 @@ snapshots:
       '@jridgewell/gen-mapping': 0.3.5
       '@jridgewell/trace-mapping': 0.3.25
 
-  '@anatine/zod-openapi@2.2.7(openapi3-ts@4.3.3)(zod@3.24.2)':
+  '@anatine/zod-openapi@2.2.8(openapi3-ts@4.3.3)(zod@3.24.2)':
     dependencies:
       openapi3-ts: 4.3.3
       ts-deepmerge: 6.2.1
