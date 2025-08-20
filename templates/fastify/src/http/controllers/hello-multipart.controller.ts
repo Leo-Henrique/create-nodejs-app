@@ -1,5 +1,5 @@
 import { FastifyZodInstance } from "@/@types/fastify";
-import { createControllerResponseSchema } from "@/core/create-controller-response-schema";
+import { createControllerResponseSchema } from "@/core/fastify/create-controller-response-schema";
 import { z } from "zod";
 import { InternalServerError, ValidationError } from "../errors";
 import {

@@ -17,3 +17,8 @@ export type ZodUnrestrictShape<Target> = {
 export type ZodUnrestrictFieldsShape<Target> = {
   [K in keyof Target | (string & {})]?: ZodTypeAny;
 };
+
+export type ZodUnrestrictEnumFromLiterals<Target extends string> = [
+  Target,
+  ...Target[],
+];
