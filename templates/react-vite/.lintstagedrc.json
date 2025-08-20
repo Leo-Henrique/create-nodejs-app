@@ -1,4 +1,6 @@
 {
   "*.{js,jsx,ts,tsx,css,scss,html,json,yaml,yml,md}": "prettier --write --cache",
-  "*.{js,jsx,ts,tsx}": ["eslint --max-warnings 0 --fix --cache --no-ignore --no-warn-ignored"]
+  "*.{js,jsx,ts,tsx}": [
+    "eslint --max-warnings 0 --fix --cache --no-ignore --no-warn-ignored"
+  ]
 }
