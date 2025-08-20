@@ -1,7 +1,7 @@
 import { publicEnv } from "@/public-env";
-import { ApiError, ApiUnexpectedResponseError } from "./errors";
+import { ApiError, ApiUnknownError } from "./errors";
 
-type SwrFetcherOutput = {
+export type SwrFetcherOutput = {
   body: unknown;
   status: number;
   headers: Headers;
@@ -11,16 +11,19 @@ export async function swrFetcher<Output extends SwrFetcherOutput>(
   endpointUrl: RequestInfo | URL,
   options: RequestInit,
 ): Promise<Output> {
-  const url = new URL(publicEnv.API_BASE_URL);
+  const url = getFullUrlFromApiByEndpoint(endpointUrl);
+  let response: Response;
 
-  if (url.pathname.endsWith("/")) {
-    url.pathname = endpointUrl.toString();
-  } else {
-    url.pathname += endpointUrl;
+  try {
+    response = await fetch(url, {
+      credentials: "include",
+      ...options,
+    });
+  } catch {
+    throw new ApiUnknownError();
   }
 
-  const response = await fetch(endpointUrl, options);
-  let body: unknown;
+  let body: unknown = null;
 
   if (
     response.headers.get("Content-Type")?.includes("application/json") &&
@@ -38,7 +41,7 @@ export async function swrFetcher<Output extends SwrFetcherOutput>(
 
     if (error) throw new ApiError(error.statusCode, error.error, error.message);
 
-    throw new ApiUnexpectedResponseError();
+    throw new ApiUnknownError();
   }
 
   return {
@@ -46,4 +49,28 @@ export async function swrFetcher<Output extends SwrFetcherOutput>(
     status: response.status,
     headers: response.headers,
   } as Awaited<Output>;
+}
+
+function getFullUrlFromApiByEndpoint(endpointUrl: RequestInfo | URL) {
+  const url = new URL(publicEnv.API_BASE_URL);
+  const [pathname, stringifiedSearchParams] = endpointUrl.toString().split("?");
+
+  if (url.pathname.endsWith("/")) {
+    url.pathname = pathname;
+  } else {
+    url.pathname += pathname;
+  }
+
+  if (stringifiedSearchParams) {
+    const searchParams = new URLSearchParams(stringifiedSearchParams);
+
+    for (const searchParamKey of Array.from(searchParams.keys())) {
+      const searchParamValue = searchParams.get(searchParamKey);
+
+      if (searchParamValue)
+        url.searchParams.set(searchParamKey, searchParamValue);
+    }
+  }
+
+  return url;
 }
