@@ -1,15 +1,12 @@
-import { privateRoutes } from "@/routes";
-import { Outlet, useLocation } from "react-router";
+import { useCurrentRoute } from "@/hooks/use-current-route";
+import { Outlet } from "react-router";
 
 export function AppLayout() {
-  const { pathname } = useLocation();
-  const currentPublicRoute = Object.values(privateRoutes).find(privateRoute => {
-    return privateRoute.path === pathname;
-  });
+  const currentRoute = useCurrentRoute();
 
   return (
     <>
-      {currentPublicRoute && <title>{currentPublicRoute.title}</title>}
+      {currentRoute && <title>{currentRoute.title}</title>}
 
       <div>
         <Outlet />

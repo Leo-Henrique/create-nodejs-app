@@ -12,7 +12,7 @@ const signInFormSchema = z.object({
 
 type SignInForm = z.infer<typeof signInFormSchema>;
 
-export function SignIn() {
+export function SignInPage() {
   const navigate = useNavigate();
 
   const signInForm = useForm<SignInForm>({
