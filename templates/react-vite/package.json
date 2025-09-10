@@ -43,7 +43,7 @@
     "type-fest": "4.40.1",
     "typescript": "~5.8.3",
     "typescript-eslint": "8.31.1",
-    "vite": "6.3.5",
+    "vite": "6.3.6",
     "vite-tsconfig-paths": "5.1.4"
   }
 }
