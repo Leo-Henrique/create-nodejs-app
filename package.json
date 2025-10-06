@@ -48,7 +48,7 @@
   },
   "devDependencies": {
     "@eslint/js": "9.23.0",
-    "@faker-js/faker": "9.6.0",
+    "@faker-js/faker": "9.9.0",
     "@types/node": "22.13.14",
     "@types/prompts": "2.4.9",
     "@types/validate-npm-package-name": "4.0.2",
