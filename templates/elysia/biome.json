@@ -10,6 +10,6 @@
 		"enabled": true
 	},
 	"assist": {
-		"enabled": true
+		"enabled": false
 	}
 }
