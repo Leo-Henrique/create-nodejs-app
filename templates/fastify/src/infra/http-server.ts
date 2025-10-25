@@ -4,7 +4,7 @@ import { swaggerUiPrefix } from "@/http/plugins/swagger-ui.plugin";
 
 (async () => {
   await app.ready();
-  await app.listen({ port: env.API_PORT });
+  await app.listen({ port: env.API_PORT, host: "0.0.0.0" });
 
   if (env.API_NAME) {
     console.log(`Application "${env.API_NAME}" is running!`);
