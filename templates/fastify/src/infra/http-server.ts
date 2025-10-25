@@ -1,5 +1,6 @@
 import { env } from "@/env";
 import { app } from "@/http/app";
+import { swaggerUiPrefix } from "@/http/plugins/swagger-ui.plugin";
 
 (async () => {
   await app.ready();
@@ -12,5 +13,5 @@ import { app } from "@/http/app";
   }
 
   if (env.NODE_ENV === "development")
-    console.log(`http://localhost:${env.API_PORT}`);
+    console.log(`http://localhost:${env.API_PORT}${swaggerUiPrefix}`);
 })();

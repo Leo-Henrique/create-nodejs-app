@@ -1,9 +1,11 @@
 import { FastifyZodInstance } from "@/@types/fastify";
 import fastifySwaggerUi from "@fastify/swagger-ui";
 
+export const swaggerUiPrefix = "/docs";
+
 export function swaggerUiPlugin(app: FastifyZodInstance) {
   app.register(fastifySwaggerUi, {
-    routePrefix: "/",
+    routePrefix: swaggerUiPrefix,
     logo: {
       type: "image/svg+xml",
       content: getSwaggerSvgRawLogo(),
