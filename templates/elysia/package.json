@@ -1,0 +1,28 @@
+{
+	"name": "app-name",
+	"version": "1.0.0",
+	"private": true,
+	"scripts": {
+		"start": "node ./dist/src/infra/http-server.js",
+		"start:dev": "tsx watch ./src/infra/http-server.ts",
+		"typecheck": "tsc --noEmit",
+		"lint": "biome lint",
+		"lint:fix": "biome lint --write",
+		"format": "biome format",
+		"format:fix": "biome format --write",
+		"check": "biome check --write",
+		"check:fix": "biome check --write",
+		"code": "biome",
+		"prebuild": "rimraf ./dist",
+		"build": "swc ./src ./package.json --copy-files --out-dir ./dist"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.3.0",
+		"@swc/cli": "0.7.8",
+		"@types/node": "24.9.1",
+		"rimraf": "6.0.1",
+		"tsx": "4.20.6",
+		"type-fest": "5.1.0",
+		"typescript": "5.9.3"
+	}
+}
