@@ -13,7 +13,9 @@
 		"check": "biome check",
 		"check:fix": "biome check --write",
 		"prebuild": "rimraf ./dist",
-		"build": "swc ./src ./package.json --copy-files --out-dir ./dist"
+		"build": "swc ./src ./package.json --copy-files --out-dir ./dist",
+		"test:integration": "vitest run --config ./vitest.config.integration.mts",
+		"test:integration:watch": "vitest --config ./vitest.config.integration.mts"
 	},
 	"dependencies": {
 		"@elysiajs/cors": "1.4.0",
@@ -24,11 +26,15 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.3.0",
+		"@elysiajs/eden": "^1.4.4",
+		"@faker-js/faker": "^10.1.0",
 		"@swc/cli": "0.7.8",
 		"@types/node": "24.9.1",
 		"rimraf": "6.0.1",
 		"tsx": "4.20.6",
 		"type-fest": "5.1.0",
-		"typescript": "5.9.3"
+		"typescript": "5.9.3",
+		"vite-tsconfig-paths": "^5.1.4",
+		"vitest": "^4.0.6"
 	}
 }

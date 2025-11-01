@@ -48,6 +48,18 @@ export abstract class BaseError<
 		return this.getUnbuildInstance<StatusCode, Message, DebugInput>();
 	}
 
+	public toSerialize() {
+		return {
+			name: this.name,
+			statusCode: this.statusCode,
+			message: this.message,
+			...(env.NODE_ENV !== "production" &&
+				this.debug && {
+					debug: this.debug,
+				}),
+		};
+	}
+
 	public toController(): ElysiaCustomStatusResponse<
 		StatusCode,
 		{
@@ -56,14 +68,7 @@ export abstract class BaseError<
 			message: Message;
 		}
 	> {
-		return status(this.statusCode, {
-			name: this.name,
-			statusCode: this.statusCode,
-			message: this.message,
-			...(env.NODE_ENV !== "production" && {
-				debug: this.debug,
-			}),
-		});
+		return status(this.statusCode, this.toSerialize());
 	}
 
 	public toZodSchema(options?: {
@@ -109,7 +114,7 @@ export class ValidationError extends BaseError<
 	typeof ValidationError.message
 > {
 	public static readonly name = "VALIDATION_ERROR";
-	public static readonly statusCode = 400;
+	public static readonly statusCode = 422;
 	public static readonly message = "Os dados enviados são inválidos.";
 
 	public readonly name = ValidationError.name;

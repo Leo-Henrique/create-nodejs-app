@@ -3,15 +3,14 @@ import z from "zod";
 import { ValidationError } from "../errors";
 import { globalErrorHandlerPlugin } from "../plugins/global-error-handler.plugin";
 
-export const helloController = new Elysia().post(
+export const helloController = new Elysia().get(
 	"/hello",
 	({ query }) => {
 		const { show } = query;
 
 		if (!show)
 			return new ValidationError()
-				.setStatusCode(422)
-				.setMessage<string>("Você não quer exibir o 'Hello world' :(")
+				.setMessage("Você não quer exibir o 'Hello world' :(")
 				.setDebug(
 					"Utilize o parâmetro de consulta 'show' com o valor 'true' para exibir o 'Hello world'.",
 				)
@@ -27,9 +26,7 @@ export const helloController = new Elysia().post(
 		}),
 		response: {
 			...globalErrorHandlerPlugin.getErrorSchemas(),
-			"422": new ValidationError()
-				.setStatusCode(422)
-				.toZodSchema({ isMessageLiteral: false }),
+			"422": new ValidationError().toZodSchema({ isMessageLiteral: false }),
 		},
 		detail: {
 			operationId: "helloController",

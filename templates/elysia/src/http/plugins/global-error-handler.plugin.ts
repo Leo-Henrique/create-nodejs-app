@@ -29,7 +29,6 @@ function plugin() {
 				}
 				case "VALIDATION": {
 					return new ValidationError()
-						.setStatusCode(422)
 						.setDebug({
 							elysiaCode: code,
 							name: error.name,
@@ -42,6 +41,7 @@ function plugin() {
 				case "INVALID_COOKIE_SIGNATURE":
 				case "INVALID_FILE_TYPE":
 					return new ValidationError()
+						.setStatusCode(400)
 						.setDebug({
 							elysiaCode: code,
 							name: error.name,
