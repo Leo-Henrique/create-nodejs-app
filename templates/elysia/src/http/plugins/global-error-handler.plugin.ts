@@ -70,8 +70,8 @@ function plugin() {
 
 function getErrorSchemas() {
 	return {
-		"422": new ValidationError().setStatusCode(422).toZodSchema(),
-		"400": new ValidationError().toZodSchema(),
+		"422": new ValidationError().toZodSchema(),
+		"400": new ValidationError().setStatusCode(400).toZodSchema(),
 		"500": new InternalServerError().toZodSchema(),
 	} satisfies Omit<ZodRestrictFieldsShape<MetadataResponse>, 404>;
 }
