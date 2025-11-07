@@ -14,7 +14,6 @@ jobs:
             ./templates/clean,
             ./templates/fastify,
             ./templates/nest,
-            ./templates/elysia,
             ./templates/react-vite,
           ]
 
@@ -58,7 +57,7 @@ jobs:
 
     strategy:
       matrix:
-        project: [./templates/fastify, ./templates/nest]
+        project: [./templates/fastify, ./templates/nest, ./templates/elysia]
 
     name: Integration test (${{ matrix.project }})
 
