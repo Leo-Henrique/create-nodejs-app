@@ -215,6 +215,32 @@ describe("[CLI] should be able to run and use program with a cli", () => {
       );
     });
 
+    it("should be able to create a project with a elysia framework", async () => {
+      const sut = run([
+        projectName,
+        "--package-manager",
+        "pnpm",
+        "--framework",
+        "elysia",
+      ]);
+
+      expect(sut).toContain(SUCCESS_MESSAGE);
+
+      let [
+        elysiaTemplateFiles,
+        generatedProjectFiles, // eslint-disable-line prefer-const
+      ] = await Promise.all([
+        readdir(resolve(TEMPLATES_PATH, "elysia")),
+        readdir(resolve(GENERATED_APP_TARGET_ROOT_PATH, projectName)),
+      ]);
+
+      elysiaTemplateFiles = validTemplatePaths(elysiaTemplateFiles);
+
+      expect(generatedProjectFiles).toEqual(
+        expect.arrayContaining(elysiaTemplateFiles),
+      );
+    });
+
     it("should be able to create a project with a react framework with vite", async () => {
       const sut = run([
         projectName,

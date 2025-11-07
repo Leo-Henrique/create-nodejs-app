@@ -11,9 +11,8 @@ export const backEndFrameworks = [
     value: "nest",
   },
   {
-    title: "tRPC",
-    value: "trpc",
-    disabled: true,
+    title: "Elysia",
+    value: "elysia",
   },
 ] as const;
 
