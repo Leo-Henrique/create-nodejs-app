@@ -2,8 +2,8 @@ import { mergeConfig } from "vitest/config";
 import defaultConfig from "./vitest.config.mjs";
 
 export default mergeConfig(defaultConfig, {
-	test: {
-		include: [`./src/http/**/*.spec.ts`],
-		fileParallelism: false,
-	},
+  test: {
+    include: [`./src/http/**/*.spec.ts`],
+    fileParallelism: false,
+  },
 });

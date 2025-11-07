@@ -3,5 +3,5 @@ import { helloMultipartController } from "./hello-multipart.controller";
 import { helloController } from "./hello.controller";
 
 export const controllers = new Elysia()
-	.use(helloController)
-	.use(helloMultipartController);
+  .use(helloController)
+  .use(helloMultipartController);
