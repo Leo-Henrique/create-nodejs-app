@@ -25,7 +25,7 @@
     "zod": "4.1.12"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.3.0",
+    "@biomejs/biome": "2.3.5",
     "@elysiajs/eden": "^1.4.4",
     "@faker-js/faker": "^10.1.0",
     "@swc/cli": "0.7.8",
