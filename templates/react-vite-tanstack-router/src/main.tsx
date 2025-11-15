@@ -3,6 +3,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import { tanstackRouterInstance } from "./lib/tanstack-router-instance";
+import "./lib/zod-config";
 
 const rootElement = document.getElementById("root");
 
