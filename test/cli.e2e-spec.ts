@@ -266,5 +266,33 @@ describe("[CLI] should be able to run and use program with a cli", () => {
         expect.arrayContaining(reactViteTemplateFiles),
       );
     });
+
+    it("should be able to create a project with a react framework with vite + tanstack router", async () => {
+      const sut = run([
+        projectName,
+        "--package-manager",
+        "pnpm",
+        "--framework",
+        "react-vite-tanstack-router",
+      ]);
+
+      expect(sut).toContain(SUCCESS_MESSAGE);
+
+      let [
+        reactViteTanstackRouterTemplateFiles,
+        generatedProjectFiles, // eslint-disable-line prefer-const
+      ] = await Promise.all([
+        readdir(resolve(TEMPLATES_PATH, "react-vite-tanstack-router")),
+        readdir(resolve(GENERATED_APP_TARGET_ROOT_PATH, projectName)),
+      ]);
+
+      reactViteTanstackRouterTemplateFiles = validTemplatePaths(
+        reactViteTanstackRouterTemplateFiles,
+      );
+
+      expect(generatedProjectFiles).toEqual(
+        expect.arrayContaining(reactViteTanstackRouterTemplateFiles),
+      );
+    });
   });
 });

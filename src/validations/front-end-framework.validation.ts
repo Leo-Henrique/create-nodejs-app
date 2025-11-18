@@ -4,8 +4,13 @@ import { getValidOptionsFromSelect } from "@/utils/get-valid-options-from-prompt
 export const frontEndFrameworks = [
   {
     title:
-      "React + Vite (includes: React Router v7, SWR + Orval, React Hook Form + Zod)",
+      "React + Vite (includes: React Router v7 Declarative, SWR + Orval, React Hook Form + Zod)",
     value: "react-vite",
+  },
+  {
+    title:
+      "React + Vite (includes: Tanstack Router, SWR + Kubb, React Hook Form + Zod v4)",
+    value: "react-vite-tanstack-router",
   },
   {
     title: "Next.js",
