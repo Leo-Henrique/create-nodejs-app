@@ -65,27 +65,21 @@ export abstract class BaseError<
     {
       name: Name;
       statusCode: StatusCode;
-      message: Message;
+      message: string;
     }
   > {
     return status(this.statusCode, this.toSerialize());
   }
 
-  public toZodSchema(options?: {
-    isNameLiteral?: boolean;
-    isStatusCodeLiteral?: boolean;
-    isMessageLiteral?: boolean;
-  }) {
-    const { isNameLiteral, isStatusCodeLiteral, isMessageLiteral } = {
-      isNameLiteral: true,
-      isStatusCodeLiteral: true,
-      isMessageLiteral: true,
+  public toZodSchema(options?: { isMessageLiteral?: boolean }) {
+    const { isMessageLiteral } = {
+      isMessageLiteral: false,
       ...options,
     };
 
     return z.object({
-      name: isNameLiteral ? z.literal(this.name) : z.string(),
-      statusCode: isStatusCodeLiteral ? z.literal(this.statusCode) : z.number(),
+      name: z.literal(this.name),
+      statusCode: z.literal(this.statusCode),
       message: isMessageLiteral ? z.literal(this.message) : z.string(),
     });
   }

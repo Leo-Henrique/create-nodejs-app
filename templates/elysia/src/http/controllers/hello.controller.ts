@@ -26,7 +26,6 @@ export const helloController = new Elysia().get(
     }),
     response: {
       ...globalErrorHandlerPlugin.getErrorSchemas(),
-      "422": new ValidationError().toZodSchema({ isMessageLiteral: false }),
     },
     detail: {
       operationId: "helloController",

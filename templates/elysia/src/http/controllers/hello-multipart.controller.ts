@@ -41,7 +41,6 @@ export const helloMultipartController = new Elysia().post(
     parse: "multipart/form-data",
     response: {
       ...globalErrorHandlerPlugin.getErrorSchemas(),
-      "422": new ValidationError().toZodSchema({ isMessageLiteral: false }),
     },
     detail: {
       operationId: "helloMultipartController",
