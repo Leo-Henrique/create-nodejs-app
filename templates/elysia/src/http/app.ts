@@ -6,7 +6,6 @@ import openapi, { fromTypes } from "@elysiajs/openapi";
 import { Elysia } from "elysia";
 import z from "zod";
 import { controllers } from "./controllers";
-import "./controllers/hello.controller";
 import { globalErrorHandlerPlugin } from "./plugins/global-error-handler.plugin";
 
 export const openApiUrlPathname = "/openapi";
