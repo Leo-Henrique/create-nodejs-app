@@ -4,7 +4,7 @@ import { UnprocessableEntityError } from "../errors";
 import { controllerErrorHandlerPlugin } from "../plugins/controller-error-handler.plugin";
 
 export const helloMultipartController = new Elysia()
-  .use(controllerErrorHandlerPlugin.plugin)
+  .use(controllerErrorHandlerPlugin.plugin())
   .post(
     "/hello/multipart",
     ({ query, body }) => {

@@ -4,7 +4,7 @@ import { UnprocessableEntityError } from "../errors";
 import { controllerErrorHandlerPlugin } from "../plugins/controller-error-handler.plugin";
 
 export const helloController = new Elysia()
-  .use(controllerErrorHandlerPlugin.plugin)
+  .use(controllerErrorHandlerPlugin.plugin())
   .get(
     "/hello",
     ({ query }) => {

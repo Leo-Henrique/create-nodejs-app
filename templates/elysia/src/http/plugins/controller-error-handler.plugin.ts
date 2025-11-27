@@ -9,7 +9,7 @@ import {
 
 function plugin() {
   return new Elysia({ name: "controller-error-handler-plugin" }).onError(
-    { as: "local" },
+    { as: "scoped" },
     ({ code, error }) => {
       switch (code) {
         case "VALIDATION": {
