@@ -38,8 +38,6 @@ export const app = new Elysia({
   )
   .onError(({ code }) => {
     if (code === "NOT_FOUND")
-      return new NotFoundError()
-        .setCode("NONEXISTENT_ROUTE")
-        .toController() 
+      return new NotFoundError().setCode("NONEXISTENT_ROUTE").toController();
   })
   .use(controllers);
