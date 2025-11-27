@@ -7,16 +7,23 @@ export abstract class BaseError<
   Name extends string = string,
   StatusCode extends number = number,
   Message extends string = string, // It cannot be undefined because of the native Error type.
+  Code extends string | null = null,
   Debug = undefined,
 > extends Error {
   public abstract name: Name;
   public abstract statusCode: StatusCode;
   public message!: Message;
+  public code!: Code;
   public debug!: Debug;
 
+  // biome-ignore lint/complexity/noUselessConstructor: this is necessary to prevent arguments when instantiating.
+  public constructor() {
+    super();
+  }
+
   private getUnbuildInstance<
-    StatusCode extends number,
     Message extends string,
+    Code extends string | null,
     Debug,
   >() {
     return this as unknown as BaseError<
@@ -24,34 +31,34 @@ export abstract class BaseError<
       Name,
       StatusCode,
       Message,
+      Code,
       Debug
     >;
   }
 
-  public setStatusCode<const StatusCodeInput extends number>(
-    statusCode: StatusCodeInput,
-  ) {
-    this.statusCode = statusCode as unknown as StatusCode;
+  public setCode<const CodeInput extends string>(code: CodeInput) {
+    this.code = code as unknown as Code;
 
-    return this.getUnbuildInstance<StatusCodeInput, Message, Debug>();
+    return this.getUnbuildInstance<Message, CodeInput, Debug>();
   }
 
   public setMessage<const MessageInput extends string>(message: MessageInput) {
     this.message = message as unknown as Message;
 
-    return this.getUnbuildInstance<StatusCode, MessageInput, Debug>();
+    return this.getUnbuildInstance<MessageInput, Code, Debug>();
   }
 
   public setDebug<const DebugInput>(debug: DebugInput) {
     this.debug = debug as unknown as Debug;
 
-    return this.getUnbuildInstance<StatusCode, Message, DebugInput>();
+    return this.getUnbuildInstance<Message, Code, DebugInput>();
   }
 
   public toSerialize() {
     return {
       name: this.name,
       statusCode: this.statusCode,
+      code: this.code,
       message: this.message,
       ...(env.NODE_ENV !== "production" &&
         this.debug && {
@@ -65,22 +72,32 @@ export abstract class BaseError<
     {
       name: Name;
       statusCode: StatusCode;
-      message: string;
+      code: Code;
+      message: Message;
+      debug?: unknown;
     }
   > {
     return status(this.statusCode, this.toSerialize());
   }
 
-  public toZodSchema(options?: { isMessageLiteral?: boolean }) {
-    const { isMessageLiteral } = {
-      isMessageLiteral: false,
-      ...options,
+  public toZodSchema(
+    { nonLiteral }: { nonLiteral: ("code" | "message")[] } = { nonLiteral: [] },
+  ) {
+    const getCodeSchema = () => {
+      if (nonLiteral.includes("code")) return z.string();
+
+      if (this.code) return z.literal(this.code);
+
+      return z.null();
     };
 
     return z.object({
       name: z.literal(this.name),
       statusCode: z.literal(this.statusCode),
-      message: isMessageLiteral ? z.literal(this.message) : z.string(),
+      code: getCodeSchema(),
+      message: nonLiteral.includes("message")
+        ? z.string()
+        : z.literal(this.message),
     });
   }
 }
@@ -101,32 +118,86 @@ export class InternalServerError extends BaseError<
   public readonly message = InternalServerError.message;
 }
 
-export class ValidationError extends BaseError<
-  ValidationError,
-  typeof ValidationError.name,
-  typeof ValidationError.statusCode,
-  typeof ValidationError.message
+export class BadRequestError extends BaseError<
+  BadRequestError,
+  typeof BadRequestError.name,
+  typeof BadRequestError.statusCode
 > {
-  public static readonly name = "VALIDATION_ERROR";
+  public static readonly name = "BAD_REQUEST_ERROR";
+  public static readonly statusCode = 400;
+
+  public readonly name = BadRequestError.name;
+  public readonly statusCode = BadRequestError.statusCode;
+}
+
+export class UnprocessableEntityError extends BaseError<
+  UnprocessableEntityError,
+  typeof UnprocessableEntityError.name,
+  typeof UnprocessableEntityError.statusCode,
+  typeof UnprocessableEntityError.message
+> {
+  public static readonly name = "UNPROCESSABLE_ENTITY";
   public static readonly statusCode = 422;
   public static readonly message = "Os dados enviados são inválidos.";
 
-  public readonly name = ValidationError.name;
-  public readonly statusCode = ValidationError.statusCode;
-  public readonly message = ValidationError.message;
+  public readonly name = UnprocessableEntityError.name;
+  public readonly statusCode = UnprocessableEntityError.statusCode;
+  public readonly message = UnprocessableEntityError.message;
 }
 
-export class ResourceNotFoundError extends BaseError<
-  ResourceNotFoundError,
-  typeof ResourceNotFoundError.name,
-  typeof ResourceNotFoundError.statusCode,
-  typeof ResourceNotFoundError.message
+export class NotFoundError extends BaseError<
+  NotFoundError,
+  typeof NotFoundError.name,
+  typeof NotFoundError.statusCode,
+  typeof NotFoundError.message
 > {
-  public static readonly name = "RESOURCE_NOT_FOUND_ERROR";
+  public static readonly name = "NOT_FOUND";
   public static readonly statusCode = 404;
   public static readonly message = "Recurso não encontrado.";
 
-  public readonly name = ResourceNotFoundError.name;
-  public readonly statusCode = ResourceNotFoundError.statusCode;
-  public readonly message = ResourceNotFoundError.message;
+  public readonly name = NotFoundError.name;
+  public readonly statusCode = NotFoundError.statusCode;
+  public readonly message = NotFoundError.message;
+}
+
+export class ConflictError extends BaseError<
+  ConflictError,
+  typeof ConflictError.name,
+  typeof ConflictError.statusCode
+> {
+  public static readonly name = "CONFLICT";
+  public static readonly statusCode = 409;
+
+  public readonly name = ConflictError.name;
+  public readonly statusCode = ConflictError.statusCode;
+}
+
+export class ForbiddenError extends BaseError<
+  ForbiddenError,
+  typeof ForbiddenError.name,
+  typeof ForbiddenError.statusCode,
+  typeof ForbiddenError.message
+> {
+  public static readonly name = "FORBIDDEN";
+  public static readonly statusCode = 403;
+  public static readonly message = "Acesso negado.";
+
+  public readonly name = ForbiddenError.name;
+  public readonly statusCode = ForbiddenError.statusCode;
+  public readonly message = ForbiddenError.message;
+}
+
+export class UnauthorizedError extends BaseError<
+  UnauthorizedError,
+  typeof UnauthorizedError.name,
+  typeof UnauthorizedError.statusCode,
+  typeof UnauthorizedError.message
+> {
+  public static readonly name = "UNAUTHORIZED";
+  public static readonly statusCode = 401;
+  public static readonly message = "Não autorizado.";
+
+  public readonly name = UnauthorizedError.name;
+  public readonly statusCode = UnauthorizedError.statusCode;
+  public readonly message = UnauthorizedError.message;
 }

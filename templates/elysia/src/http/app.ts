@@ -6,7 +6,7 @@ import openapi, { fromTypes } from "@elysiajs/openapi";
 import { Elysia } from "elysia";
 import z from "zod";
 import { controllers } from "./controllers";
-import { globalErrorHandlerPlugin } from "./plugins/global-error-handler.plugin";
+import { NotFoundError } from "./errors";
 
 export const openApiUrlPathname = "/openapi";
 
@@ -36,5 +36,10 @@ export const app = new Elysia({
       references: fromTypes(`.${__filename.replace(process.cwd(), "")}`),
     }),
   )
-  .use(globalErrorHandlerPlugin.plugin())
+  .onError(({ code }) => {
+    if (code === "NOT_FOUND")
+      return new NotFoundError()
+        .setCode("NONEXISTENT_ROUTE")
+        .toController() 
+  })
   .use(controllers);

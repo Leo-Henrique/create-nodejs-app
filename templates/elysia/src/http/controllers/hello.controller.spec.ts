@@ -1,6 +1,6 @@
 import { apiTestClient } from "test/integration/api-test-client";
 import { describe, expect, test } from "vitest";
-import { ValidationError } from "../errors";
+import { UnprocessableEntityError } from "../errors";
 import { helloController } from "./hello.controller";
 
 const [route] = helloController.routes;
@@ -9,7 +9,7 @@ const sut = apiTestClient.hello.get;
 describe(`[Controller] ${route.method} ${route.path}`, () => {
   describe("should not be able to get hello world", () => {
     describe("if invalid input", () => {
-      const error = new ValidationError();
+      const error = new UnprocessableEntityError().setCode("VALIDATION");
 
       test("with invalid property show", async () => {
         const result = await sut({
@@ -36,9 +36,9 @@ describe(`[Controller] ${route.method} ${route.path}`, () => {
         },
       });
 
-      const error = new ValidationError().setMessage(
-        "Você não quer exibir o 'Hello world' :(",
-      );
+      const error = new UnprocessableEntityError()
+        .setCode("VALIDATION")
+        .setMessage("Você não quer exibir o 'Hello world' :(");
 
       expect(result.status).toEqual(error.statusCode);
       expect(result.error).toMatchObject({ value: error.toSerialize() });
