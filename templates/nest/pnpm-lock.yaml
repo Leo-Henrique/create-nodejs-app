@@ -115,8 +115,8 @@ importers:
         specifier: 8.28.0
         version: 8.28.0(eslint@9.23.0)(typescript@5.8.3)
       unplugin-swc:
-        specifier: 1.5.7
-        version: 1.5.7(@swc/core@1.11.13)(rollup@4.19.0)
+        specifier: 1.5.9
+        version: 1.5.9(@swc/core@1.11.13)(rollup@4.19.0)
       vitest:
         specifier: 1.6.1
         version: 1.6.1(@types/node@22.19.1)(terser@5.31.3)
@@ -606,8 +606,8 @@ packages:
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
     engines: {node: '>=14'}
 
-  '@rollup/pluginutils@5.2.0':
-    resolution: {integrity: sha512-qWJ2ZTbmumwiLFomfzTyt5Kng4hwPi9rwCYN4SHb6eaRU1KNO4ccxINHr/VhH4GgPlt1XfSTLX2LBTme8ne4Zw==}
+  '@rollup/pluginutils@5.3.0':
+    resolution: {integrity: sha512-5EdhGZtnu3V88ces7s53hhfK5KSASnJZv8Lulpc04cWO3REESroJXg73DFsOmgbU2BhwV0E20bu2IDZb3VKW4Q==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
       rollup: ^1.20.0||^2.0.0||^3.0.0||^4.0.0
@@ -2554,10 +2554,6 @@ packages:
     resolution: {integrity: sha512-xUXwsxNjwTQ8K3GnT4pCJm+xq3RUPQbmkYJTP5aFIfNIvbcc/4MUxgBaaRSZJ6yGJZiGSyYlM6MzwTsRk8SYCg==}
     engines: {node: '>=12'}
 
-  picomatch@4.0.2:
-    resolution: {integrity: sha512-M7BAV6Rlcy5u+m6oPhAPFgJTzAioX/6B0DxyvDlo9l8+T3nLKbrczg2WLUyzd45L8RqfUMyGPzekbMvX2Ldkwg==}
-    engines: {node: '>=12'}
-
   picomatch@4.0.3:
     resolution: {integrity: sha512-5gTmgEY/sqK6gFXLIsQNH19lWb4ebPDLA4SdLP7dsWkIXHWlG66oPuVvXSGFPppYZz8ZDZq0dYYrbHfBCVUb1Q==}
     engines: {node: '>=12'}
@@ -3150,13 +3146,13 @@ packages:
     resolution: {integrity: sha512-pjy2bYhSsufwWlKwPc+l3cN7+wuJlK6uz0YdJEOlQDbl6jo/YlPi4mb8agUkVC8BF7V8NuzeyPNqRksA3hztKQ==}
     engines: {node: '>= 0.8'}
 
-  unplugin-swc@1.5.7:
-    resolution: {integrity: sha512-Ng4uuLAodZToA0kQk3+oY8b0C/Q9oV0ohRMixH2nqWMhCF/wNuMYZXZznYpwRLmF7wC36TFIOywBAxCLOReoeg==}
+  unplugin-swc@1.5.9:
+    resolution: {integrity: sha512-RKwK3yf0M+MN17xZfF14bdKqfx0zMXYdtOdxLiE6jHAoidupKq3jGdJYANyIM1X/VmABhh1WpdO+/f4+Ol89+g==}
     peerDependencies:
       '@swc/core': ^1.2.108
 
-  unplugin@2.3.8:
-    resolution: {integrity: sha512-lkaSIlxceytPyt9yfb1h7L9jDFqwMqvUZeGsKB7Z8QrvAO3xZv2S+xMQQYzxk0AGJHcQhbcvhKEstrMy99jnuQ==}
+  unplugin@2.3.11:
+    resolution: {integrity: sha512-5uKD0nqiYVzlmCRs01Fhs2BdkEgBS3SAVP6ndrBsuK42iC2+JHyxM05Rm9G8+5mkmRtzMZGY8Ct5+mliZxU/Ww==}
     engines: {node: '>=18.12.0'}
 
   update-browserslist-db@1.1.1:
@@ -3805,11 +3801,11 @@ snapshots:
   '@pkgjs/parseargs@0.11.0':
     optional: true
 
-  '@rollup/pluginutils@5.2.0(rollup@4.19.0)':
+  '@rollup/pluginutils@5.3.0(rollup@4.19.0)':
     dependencies:
       '@types/estree': 1.0.6
       estree-walker: 2.0.2
-      picomatch: 4.0.2
+      picomatch: 4.0.3
     optionalDependencies:
       rollup: 4.19.0
 
@@ -5896,8 +5892,6 @@ snapshots:
 
   picomatch@4.0.1: {}
 
-  picomatch@4.0.2: {}
-
   picomatch@4.0.3: {}
 
   pidtree@0.6.0: {}
@@ -6502,16 +6496,16 @@ snapshots:
   unpipe@1.0.0:
     optional: true
 
-  unplugin-swc@1.5.7(@swc/core@1.11.13)(rollup@4.19.0):
+  unplugin-swc@1.5.9(@swc/core@1.11.13)(rollup@4.19.0):
     dependencies:
-      '@rollup/pluginutils': 5.2.0(rollup@4.19.0)
+      '@rollup/pluginutils': 5.3.0(rollup@4.19.0)
       '@swc/core': 1.11.13
       load-tsconfig: 0.2.5
-      unplugin: 2.3.8
+      unplugin: 2.3.11
     transitivePeerDependencies:
       - rollup
 
-  unplugin@2.3.8:
+  unplugin@2.3.11:
     dependencies:
       '@jridgewell/remapping': 2.3.5
       acorn: 8.15.0
