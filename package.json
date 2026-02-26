@@ -1,7 +1,7 @@
 {
   "name": "@leo-h/create-nodejs-app",
   "version": "0.0.0-semantic-release",
-  "packageManager": "pnpm@9.15.9",
+  "packageManager": "pnpm@10.30.3",
   "author": "Leonardo Henrique <leonardo0507.business@gmail.com>",
   "description": "Create a modern Node.js app with TypeScript using one command.",
   "license": "MIT",
