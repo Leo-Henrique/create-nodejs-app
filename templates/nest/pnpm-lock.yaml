@@ -82,8 +82,8 @@ importers:
         specifier: 1.6.1
         version: 1.6.1(vitest@1.6.1(@types/node@22.19.15)(terser@5.31.3))
       '@vitest/eslint-plugin':
-        specifier: 1.6.9
-        version: 1.6.9(eslint@9.23.0)(typescript@5.8.3)(vitest@1.6.1(@types/node@22.19.15)(terser@5.31.3))
+        specifier: 1.6.13
+        version: 1.6.13(@typescript-eslint/eslint-plugin@8.28.0(@typescript-eslint/parser@8.28.0(eslint@9.23.0)(typescript@5.8.3))(eslint@9.23.0)(typescript@5.8.3))(eslint@9.23.0)(typescript@5.8.3)(vitest@1.6.1(@types/node@22.19.15)(terser@5.31.3))
       eslint:
         specifier: 9.23.0
         version: 9.23.0
@@ -946,14 +946,17 @@ packages:
     peerDependencies:
       vitest: 1.6.1
 
-  '@vitest/eslint-plugin@1.6.9':
-    resolution: {integrity: sha512-9WfPx1OwJ19QLCSRLkqVO7//1WcWnK3fE/3fJhKMAmDe8+9G4rB47xCNIIeCq3FdEzkIoLTfDlwDlPBaUTMhow==}
+  '@vitest/eslint-plugin@1.6.13':
+    resolution: {integrity: sha512-ui7JGWBoQpS5NKKW0FDb1eTuFEZ5EupEv2Psemuyfba7DfA5K52SeDLelt6P4pQJJ/4UGkker/BgMk/KrjH3WQ==}
     engines: {node: '>=18'}
     peerDependencies:
+      '@typescript-eslint/eslint-plugin': '*'
       eslint: '>=8.57.0'
       typescript: '>=5.0.0'
       vitest: '*'
     peerDependenciesMeta:
+      '@typescript-eslint/eslint-plugin':
+        optional: true
       typescript:
         optional: true
       vitest:
@@ -4231,12 +4234,13 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@vitest/eslint-plugin@1.6.9(eslint@9.23.0)(typescript@5.8.3)(vitest@1.6.1(@types/node@22.19.15)(terser@5.31.3))':
+  '@vitest/eslint-plugin@1.6.13(@typescript-eslint/eslint-plugin@8.28.0(@typescript-eslint/parser@8.28.0(eslint@9.23.0)(typescript@5.8.3))(eslint@9.23.0)(typescript@5.8.3))(eslint@9.23.0)(typescript@5.8.3)(vitest@1.6.1(@types/node@22.19.15)(terser@5.31.3))':
     dependencies:
       '@typescript-eslint/scope-manager': 8.56.0
       '@typescript-eslint/utils': 8.56.0(eslint@9.23.0)(typescript@5.8.3)
       eslint: 9.23.0
     optionalDependencies:
+      '@typescript-eslint/eslint-plugin': 8.28.0(@typescript-eslint/parser@8.28.0(eslint@9.23.0)(typescript@5.8.3))(eslint@9.23.0)(typescript@5.8.3)
       typescript: 5.8.3
       vitest: 1.6.1(@types/node@22.19.15)(terser@5.31.3)
     transitivePeerDependencies:
