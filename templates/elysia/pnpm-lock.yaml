@@ -12,8 +12,8 @@ importers:
         specifier: 1.4.1
         version: 1.4.1(elysia@1.4.18(@sinclair/typebox@0.34.41)(exact-mirror@0.2.2(@sinclair/typebox@0.34.41))(file-type@20.5.0)(openapi-types@12.1.3)(typescript@5.9.3))
       '@elysiajs/node':
-        specifier: 1.4.2
-        version: 1.4.2(elysia@1.4.18(@sinclair/typebox@0.34.41)(exact-mirror@0.2.2(@sinclair/typebox@0.34.41))(file-type@20.5.0)(openapi-types@12.1.3)(typescript@5.9.3))
+        specifier: 1.4.5
+        version: 1.4.5(elysia@1.4.18(@sinclair/typebox@0.34.41)(exact-mirror@0.2.2(@sinclair/typebox@0.34.41))(file-type@20.5.0)(openapi-types@12.1.3)(typescript@5.9.3))
       '@elysiajs/openapi':
         specifier: 1.4.11
         version: 1.4.11(elysia@1.4.18(@sinclair/typebox@0.34.41)(exact-mirror@0.2.2(@sinclair/typebox@0.34.41))(file-type@20.5.0)(openapi-types@12.1.3)(typescript@5.9.3))
@@ -133,8 +133,8 @@ packages:
     peerDependencies:
       elysia: '>=1.4.19'
 
-  '@elysiajs/node@1.4.2':
-    resolution: {integrity: sha512-zqeBAV4/faCcmIEjCp3g6jRwsbaWsd5HqmlEf3CirD9HkTWQNo4T+GN/qGZi7zgd84D3Kzxsny7ZTMXEfrDSXQ==}
+  '@elysiajs/node@1.4.5':
+    resolution: {integrity: sha512-K58HEre7RQWZOkLcMNl2RFnuZFzmUUyxHRBSfC2XaJz4j2AjrpHKu/f26tN9LRi3nx1L0PbH22vgZ4O2Fqppbw==}
     peerDependencies:
       elysia: '>= 1.4.0'
 
@@ -1244,8 +1244,8 @@ packages:
     resolution: {integrity: sha512-i5uvt8C3ikiWeNZSVZNWcfZPItFQOsYTUAOkcUPGd8DqDy1uOUikjt5dG+uRlwyvR108Fb9DOd4GvXfT0N2/uQ==}
     engines: {node: '>= 12'}
 
-  srvx@0.9.6:
-    resolution: {integrity: sha512-5L4rT6qQqqb+xcoDoklUgCNdmzqJ6vbcDRwPVGRXewF55IJH0pqh0lQlrJ266ZWTKJ4mfeioqHQJeAYesS+RrQ==}
+  srvx@0.11.12:
+    resolution: {integrity: sha512-AQfrGqntqVPXgP03pvBDN1KyevHC+KmYVqb8vVf4N+aomQqdhaZxjvoVp+AOm4u6x+GgNQY3MVzAUIn+TqwkOA==}
     engines: {node: '>=20.16.0'}
     hasBin: true
 
@@ -1504,11 +1504,11 @@ snapshots:
     dependencies:
       elysia: 1.4.18(@sinclair/typebox@0.34.41)(exact-mirror@0.2.2(@sinclair/typebox@0.34.41))(file-type@20.5.0)(openapi-types@12.1.3)(typescript@5.9.3)
 
-  '@elysiajs/node@1.4.2(elysia@1.4.18(@sinclair/typebox@0.34.41)(exact-mirror@0.2.2(@sinclair/typebox@0.34.41))(file-type@20.5.0)(openapi-types@12.1.3)(typescript@5.9.3))':
+  '@elysiajs/node@1.4.5(elysia@1.4.18(@sinclair/typebox@0.34.41)(exact-mirror@0.2.2(@sinclair/typebox@0.34.41))(file-type@20.5.0)(openapi-types@12.1.3)(typescript@5.9.3))':
     dependencies:
-      crossws: 0.4.1(srvx@0.9.6)
+      crossws: 0.4.1(srvx@0.11.12)
       elysia: 1.4.18(@sinclair/typebox@0.34.41)(exact-mirror@0.2.2(@sinclair/typebox@0.34.41))(file-type@20.5.0)(openapi-types@12.1.3)(typescript@5.9.3)
-      srvx: 0.9.6
+      srvx: 0.11.12
 
   '@elysiajs/openapi@1.4.11(elysia@1.4.18(@sinclair/typebox@0.34.41)(exact-mirror@0.2.2(@sinclair/typebox@0.34.41))(file-type@20.5.0)(openapi-types@12.1.3)(typescript@5.9.3))':
     dependencies:
@@ -2067,9 +2067,9 @@ snapshots:
       shebang-command: 2.0.0
       which: 2.0.2
 
-  crossws@0.4.1(srvx@0.9.6):
+  crossws@0.4.1(srvx@0.11.12):
     optionalDependencies:
-      srvx: 0.9.6
+      srvx: 0.11.12
 
   debug@4.4.3:
     dependencies:
@@ -2436,7 +2436,7 @@ snapshots:
 
   source-map@0.7.6: {}
 
-  srvx@0.9.6: {}
+  srvx@0.11.12: {}
 
   stackback@0.0.2: {}
 
