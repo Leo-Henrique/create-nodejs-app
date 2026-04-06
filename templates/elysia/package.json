@@ -22,7 +22,7 @@
     "@elysiajs/node": "1.4.5",
     "@elysiajs/openapi": "1.4.14",
     "dotenv": "17.2.3",
-    "elysia": "1.4.18",
+    "elysia": "1.4.28",
     "zod": "4.1.12"
   },
   "devDependencies": {
