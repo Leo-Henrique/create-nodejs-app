@@ -18,7 +18,7 @@
     "test:integration:watch": "vitest --config ./vitest.config.integration.mts"
   },
   "dependencies": {
-    "@elysiajs/cors": "1.4.1",
+    "@elysiajs/cors": "1.4.2",
     "@elysiajs/node": "1.4.5",
     "@elysiajs/openapi": "1.4.14",
     "dotenv": "17.2.3",
