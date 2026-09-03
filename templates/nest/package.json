@@ -44,7 +44,7 @@
     "@types/mime-types": "2.1.4",
     "@types/node": "22.19.21",
     "@types/supertest": "6.0.3",
-    "@vitest/coverage-v8": "1.6.1",
+    "@vitest/coverage-v8": "5.0.0",
     "@vitest/eslint-plugin": "1.6.27",
     "eslint": "9.23.0",
     "eslint-config-prettier": "9.1.2",
