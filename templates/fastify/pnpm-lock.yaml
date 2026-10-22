@@ -58,8 +58,8 @@ importers:
         specifier: 9.24.0
         version: 9.24.0(supports-color@7.2.0)
       eslint-config-prettier:
-        specifier: 10.1.1
-        version: 10.1.1(eslint@9.24.0(supports-color@7.2.0))
+        specifier: 10.1.8
+        version: 10.1.8(eslint@9.24.0(supports-color@7.2.0))
       globals:
         specifier: 16.5.0
         version: 16.5.0
@@ -1161,8 +1161,8 @@ packages:
     resolution: {integrity: sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==}
     engines: {node: '>=10'}
 
-  eslint-config-prettier@10.1.1:
-    resolution: {integrity: sha512-4EQQr6wXwS+ZJSzaR5ZCrYgLxqvUjdXctaEtBqHcbkW944B1NQyO4qpdHQbXBONfwxXdkAY81HH4+LUfrg+zPw==}
+  eslint-config-prettier@10.1.8:
+    resolution: {integrity: sha512-82GZUjRS0p/jganf6q1rEO25VSoHH0hKPCTrgillPjdI/3bgBhAE1QzHrHTizjpRvy6pGAvKjDJtk2pF9NDq8w==}
     hasBin: true
     peerDependencies:
       eslint: '>=7.0.0'
@@ -2389,7 +2389,7 @@ snapshots:
   '@fastify/ajv-compiler@4.0.2':
     dependencies:
       ajv: 8.17.1
-      ajv-formats: 3.0.1(ajv@8.17.1)
+      ajv-formats: 3.0.1
       fast-uri: 3.0.6
 
   '@fastify/busboy@3.1.1': {}
@@ -2973,8 +2973,8 @@ snapshots:
 
   acorn@8.14.1: {}
 
-  ajv-formats@3.0.1(ajv@8.17.1):
-    optionalDependencies:
+  ajv-formats@3.0.1:
+    dependencies:
       ajv: 8.17.1
 
   ajv@6.12.6:
@@ -3210,7 +3210,7 @@ snapshots:
 
   escape-string-regexp@4.0.0: {}
 
-  eslint-config-prettier@10.1.1(eslint@9.24.0(supports-color@7.2.0)):
+  eslint-config-prettier@10.1.8(eslint@9.24.0(supports-color@7.2.0)):
     dependencies:
       eslint: 9.24.0(supports-color@7.2.0)
 
@@ -3344,7 +3344,7 @@ snapshots:
     dependencies:
       '@fastify/merge-json-schemas': 0.2.1
       ajv: 8.17.1
-      ajv-formats: 3.0.1(ajv@8.17.1)
+      ajv-formats: 3.0.1
       fast-uri: 3.0.6
       json-schema-ref-resolver: 2.0.1
       rfdc: 1.4.1
